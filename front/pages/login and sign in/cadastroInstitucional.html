@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login Institucional - Koble</title>
+    <link rel="stylesheet" href="loginStyle.css" />
+    <script src="loginScript.js" defer></script>
+</head>
+<body class="welcomeBody">
+    <div class="leftWelcome">
+        <h1 class="kobleWelcome">Boas-vindas ao Koble</h1>
+        <p class="welcomeDescription">
+            O Koble é uma aplicação que conecta e simplifica a comunicação entre usuários e instituições.
+        </p>
+    </div>
+
+    <div class="rightWelcome">
+        <div class="loginCard">
+            <h2>Login Institucional</h2>
+            <div class="isTeacher">
+                <label for="checkTeacher">Sou professor</label>
+                <input id="checkTeacher" type="checkbox" />
+            </div>
+
+            <form class="forms">
+                <input type="text" id="registrationInput" placeholder="Registration / SIAPE" required />
+                <input type="text" id="nameInput" placeholder="Nome completo" required />
+                <input type="email" id="emailInput" placeholder="E-mail" required />
+                <input type="password" id="passwordInput" placeholder="Senha" required />
+                <input type="text" id="phoneNumberInput" placeholder="Telefone" required />
+                <input type="date" id="birthDateInput" placeholder="Data de nascimento" />
+                <button type="submit" class="loginBtn">Entrar</button>
+                <p class="redirectText">
+                Já tem uma conta? <a href="/front/pages/login and sign in/login.html" class="redirectLink">Faça login</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

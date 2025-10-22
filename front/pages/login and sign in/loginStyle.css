@@ -1,0 +1,145 @@
+:root {
+    --primary-color: #34f76f;
+    --secondary-color: #e322f5;
+    --bg-light: #f6f6f6;
+    --text-dark: #333;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+.welcomeBody {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--bg-light);
+}
+
+.leftWelcome {
+    width: 35vw;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+}
+
+.kobleWelcome {
+    font-size: 2.4em;
+    margin-bottom: 10px;
+}
+
+.welcomeDescription {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+.rightWelcome {
+    width: 65vw;
+    display: flex;
+    justify-content: center;
+    background-color: var(--bg-light);
+}
+
+.loginCard {
+    background: white;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    margin-top: 200px;
+    margin-bottom: auto;
+}
+
+.loginCard h2 {
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+.forms {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.forms input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1em;
+}
+
+.loginBtn {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.loginBtn:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.isTeacher {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.isCompany{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px; 
+}
+
+/* Transições suaves */
+@keyframes fadeIn {
+    from { opacity: 0; height: 0; }
+    to { opacity: 1; height: auto; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; height: auto; }
+    to { opacity: 0; height: 0; }
+}
+
+.hiddenField {
+    animation: fadeOut 0.3s forwards;
+}
+
+.visibleField {
+    animation: fadeIn 0.3s forwards;
+}
+
+/* Texto de redirecionamento */
+.redirectText {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: var(--text-dark);
+}
+
+.redirectLink {
+    color: var(--secondary-color);
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.redirectLink:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}

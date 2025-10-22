@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Entrar - Koble</title>
+    <link rel="stylesheet" href="loginStyle.css" />
+    <script src="loginScript.js" defer></script>
+</head>
+<body class="welcomeBody">
+    <div class="leftWelcome">
+        <h1 class="kobleWelcome">Bem-vindo de volta ao Koble</h1>
+        <p class="welcomeDescription">
+            Continue sua jornada conectando pessoas e instituições.
+        </p>
+    </div>
+
+    <div class="rightWelcome">
+        <div class="loginCard">
+            <h2>Entrar</h2>
+            <form class="forms">
+                <input type="email" id="emailInput" placeholder="E-mail" required />
+                <input type="password" id="passwordInput" placeholder="Senha" required />
+                <button type="submit" class="loginBtn">Entrar</button>
+            </form>
+            <p class="redirectText">
+                Não tem uma conta? <a href="/front/pages/welcome/welcome.html" class="redirectLink">Crie uma agora</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

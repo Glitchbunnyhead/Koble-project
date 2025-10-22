@@ -1,0 +1,72 @@
+:root {
+    --primary-color: #34f76f;
+    --secondary-color: #e322f5;
+    --bg-light: #f6f6f6;
+    --text-dark: #333;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.welcomeBody {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
+
+.leftWelcome {
+    width: 35vw;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+}
+
+.rightWelcome {
+    width: 65vw;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcomeCard {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.welcomeCard h2 {
+    color: var(--text-dark);
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.welcomeCard p {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.userType {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.userTypeButton {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.userTypeButton:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
