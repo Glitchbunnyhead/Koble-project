@@ -4,7 +4,7 @@ public class CompanyProject {
 
     //Declaring class attributes
     private Company company;
-    private  Project project;
+    private Project project;
 
     //Constructor of the class
     public CompanyProject(){}

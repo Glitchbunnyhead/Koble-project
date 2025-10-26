@@ -29,8 +29,5 @@ public class TeacherIdea {
     public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
-
-    
-    
     
 }

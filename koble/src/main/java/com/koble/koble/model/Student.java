@@ -8,18 +8,18 @@ public class Student {
     private long id;
     private String registration;
     private String name;
-    private String emial;
-    private String passsword;
+    private String email;
+    private String password;
     private String phoneNumber;
     private Date birthDate;
 
     //Constructor of the class
     public Student(){}
 
-    public Student(String emial, String name, String passsword, String phoneNumber, String registration, Date birthDate) {
-        this.emial = emial;
+    public Student(String email, String name, String password, String phoneNumber, String registration, Date birthDate) {
+        this.email = email;
         this.name = name;
-        this.passsword = passsword;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.registration = registration;
         this.birthDate = birthDate;
@@ -51,20 +51,20 @@ public class Student {
         this.name = name;
     }
 
-    public String getEmial() {
-        return emial;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmial(String emial) {
-        this.emial = emial;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getPasssword() {
-        return passsword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasssword(String passsword) {
-        this.passsword = passsword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPhoneNumber() {

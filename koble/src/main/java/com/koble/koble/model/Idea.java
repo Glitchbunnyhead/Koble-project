@@ -66,7 +66,7 @@ public class Idea {
         this.justification = justification;
     }
 
-    public String geTitle() {
+    public String getTitle() {
         return title;
     }
 

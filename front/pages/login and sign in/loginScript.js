@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const birthDateInput = document.getElementById("birthDateInput");
     const isCompany = document.getElementById("checkCompany");
     const cnpjInput = document.getElementById("cnpjInput");
-    const loginForm = document.querySelector(".forms");
+    const loginForm = document.getElementById("LForm");
 
     // ===== Função auxiliar para animação =====
     function toggleAnimated(element, show) {
@@ -33,10 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ===== Redirecionar após login =====
-    if (loginForm) {
-        loginForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            window.location.href = "index.html";
-        });
-    }
+    loginForm.addEventListener('submit', function(){
+        window.open("../../index.html");
+    })
 });

@@ -5,7 +5,7 @@ public abstract class Project {
     //Declaring class attributes
     private long id;
     private String timeline;
-    private String linkExtension; // CORREÇÃO: era 'linlExtension'
+    private String linkExtension; 
     private String duration;
     private String image;
     private String complementHours;

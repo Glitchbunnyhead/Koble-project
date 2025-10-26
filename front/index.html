@@ -3,9 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <!-- Header Section -->
+    <div id="header">
+        <!-- Search Bar Section -->
+        <div class="search-container">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search for projects, teachers, or companies..." class="search-input">
+                <button type="button" id="searchBtn" class="search-button">
+                    🔍
+                </button>
+            </div>
+            <!-- Search Results (hidden by default) -->
+            <div id="searchResults" class="search-results hidden">
+                <div class="result-item">No results found</div>
+            </div>
+        </div>
+        <div class="redirects">
+            <p class="redirectsElements">ajuda</p>
+        </div>
+        <div class="redirects">
+            <p class="redirectsElements">
+                tutoriais
+            </p>
+        </div>
+        <div class="redirects">
+            <p class="redirectsElements">
+                sobre
+            </p>
+        </div>
+        <div class="configDiv">
+            <a href=""><img src="images/image.png" alt="configurações" class="config-icon"></a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

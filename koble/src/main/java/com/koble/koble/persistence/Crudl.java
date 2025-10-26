@@ -10,12 +10,11 @@ public interface Crudl<T> {
     // Method to create a new register in the Database;
     public T create(T entity);
 
-    //---------------REVIEW THE INSTACIATION LOGIC---------------------------
     // Method to delete a register from the Database by its id;
-    public boolean delete(long idEntity);
+    public String delete(long idEntity);
 
     // Method to update an existing register in the Database;
-    public T update(long id, T entity);
+    public T update(long idEntity, T entity);
 
     // Method to read a register from the Database by its id;
     public T read(long idEntity);

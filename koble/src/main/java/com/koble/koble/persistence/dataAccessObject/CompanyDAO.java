@@ -70,12 +70,13 @@ public class CompanyDAO implements Crudl<Company> {
             connection.closeConnection();
         }
 
+        System.out.println("Company created successfully");
         return company;
     }
 
     @Override
     // Method to delete a register from the Database.
-    public boolean delete(long id) {
+    public String delete(long id) {
         // Oppening the connection to the Database.
         this.connection.openConnection();
         // Delete SQL sentence.
@@ -96,8 +97,7 @@ public class CompanyDAO implements Crudl<Company> {
         // SQLException is an exception that is thrown when there is an error with the SQL code.
         catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("Error deleting company: " + e.getMessage());
-            return false; 
+            return "Error deleting company: " + e.getMessage(); 
         }
 
         // Closing the connection to the Database.
@@ -105,13 +105,11 @@ public class CompanyDAO implements Crudl<Company> {
             connection.closeConnection();
         }
 
-        System.out.println("Company deleted successfully");
-        return true;
+        return "Company deleted successfully";
     }
 
 
     @Override
-    //-----------THE METHOD IT'S NOT WORKING-----------------------------
     // Method to update an existing register in the Database.
     public Company update(long id, Company company) {
         // Oppening the connection to the Database.
@@ -143,7 +141,6 @@ public class CompanyDAO implements Crudl<Company> {
                 
                 // Executing the update operation.
                 st.executeUpdate();
-                return company;
             } else {
                 System.out.println("Error updating company: company object is null");
                 return null;
@@ -152,17 +149,18 @@ public class CompanyDAO implements Crudl<Company> {
 
         // SQLException is an exception that is thrown when there is an error with the SQL code.
         catch (SQLException e) {
-            System.out.println("SQL Error during update: " + e.getMessage());
             e.printStackTrace();
+            System.out.println("Error updating company: " + e.getMessage()); 
             return null;
         }
 
         // Closing the connection to the Database.
         finally {
             connection.closeConnection();
-            System.out.println("Company updated successfully");
-            this.connection.closeConnection();
-        }    
+        }
+
+        System.out.println ("Company updated successfully");
+        return company;
     }
 
 
@@ -265,3 +263,5 @@ public class CompanyDAO implements Crudl<Company> {
         return companies;
     }
 }
+
+

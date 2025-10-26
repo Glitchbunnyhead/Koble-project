@@ -9,7 +9,7 @@ package com.koble.koble.persistence;
     public static final String TABLE_COMPANY = "company";
     public static final String TABLE_COMPANYPROJECT = "company_project";
     public static final String TABLE_EDUCATIONALPROJECT = "teaching";
-    public static final String TABLE_EXTERNALPERSON = "external_person";
+    public static final String TABLE_EXTERNALPERSON = "external_user";
     public static final String TABLE_EXTENTIONPROJECT = "extension";
     public static final String TABLE_FELLOW = "fellow";
     public static final String TABLE_IDEA = "idea";
@@ -29,7 +29,7 @@ package com.koble.koble.persistence;
     public static final String COLUMN_CPF = "cpf";
     public static final String COLUMN_DISCIPLINE = "discipline";
     public static final String COLUMN_EXTERNALPERSONID = "external_user_id";
-    public static final String COLUMN_EXTENTIONID = "extenaion_id";
+    public static final String COLUMN_EXTENTIONID = "extention_id";
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_IDEAID = "idea_id";
     public static final String COLUMN_JUSTIFICATION = "justification";
@@ -45,7 +45,7 @@ package com.koble.koble.persistence;
     public static final String COLUMN_SUBTITLE = "subtitle";
     public static final String COLUMN_TARGETAUDIENCE = "target_audience";
     public static final String COLUMN_TEACHINGID = "teaching_id";
-    public static final String COLUMN_TEARCHERID = "teacher_id";
+    public static final String COLUMN_TEACHERID = "teacher_id";
     public static final String COLUMN_TITLE = "title";
     
     //Specific column names:
@@ -84,7 +84,8 @@ package com.koble.koble.persistence;
     // Table: project
     public static final String PROJECT_COLUNA_COMPLEMENTARY_HOURS = "complementary_hours";
     public static final String PROJECT_COLUNA_COORDINATOR = "coordinator";
-    public static final String PROJECT_COLUNA_CRONOGRAMA = "cronograma";
+    public static final String PROJECT_COLUNA_TIMELINE = "timeline";
+    public static final String PROJECT_COLUNA_CRONOGRAMA = "timeline"; // Alias for timeline
     public static final String PROJECT_COLUNA_DURATION = "duration";
     public static final String PROJECT_COLUNA_EXTERNAL_LINK = "external_link";
     public static final String PROJECT_COLUNA_ID = "project_id";
@@ -94,6 +95,25 @@ package com.koble.koble.persistence;
     public static final String PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE = "scholarship_available";
     public static final String PROJECT_COLUNA_SCHOLARSHIP_QUANTITY = "scholarship_quantity";
     public static final String PROJECT_COLUNA_SCHOLARSHIP_TYPE = "scholarship_type";
+    public static final String PROJECT_COLUNA_TITLE = "title";
+    public static final String PROJECT_COLUNA_SUBTITLE = "subtitle";
+    public static final String PROJECT_COLUNA_DESCRIPTION = "description";
+    public static final String PROJECT_COLUNA_TYPE = "project_type";
+    
+    // Research project specific columns
+    public static final String PROJECT_COLUNA_RESEARCH_OBJECTIVE = "research_objective";
+    public static final String PROJECT_COLUNA_RESEARCH_JUSTIFICATION = "research_justification";
+    public static final String PROJECT_COLUNA_RESEARCH_DISCIPLINE = "research_discipline";
+    
+    // Extension project specific columns
+    public static final String PROJECT_COLUNA_EXTENSION_TARGET_AUDIENCE = "extension_target_audience";
+    public static final String PROJECT_COLUNA_EXTENSION_SLOTS = "extension_slots";
+    public static final String PROJECT_COLUNA_EXTENSION_SELECTION_PROCESS = "extension_selection_process";
+    
+    // Educational project specific columns
+    public static final String PROJECT_COLUNA_EDUCATIONAL_SLOTS = "educational_slots";
+    public static final String PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION = "educational_justification";
+    public static final String PROJECT_COLUNA_EDUCATIONAL_COURSE = "educational_course";
 
     // Table: participant
     public static final String PARTICIPANT_COLUNA_CONTACT_NUMBER = "contact_number";

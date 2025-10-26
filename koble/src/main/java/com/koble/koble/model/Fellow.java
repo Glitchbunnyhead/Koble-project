@@ -5,6 +5,7 @@ import java.util.Date;
 public class Fellow {
 
     //Declaring class attributes
+    private long id;
     private Student student;
     private Project project;
     private String cpf;
@@ -14,6 +15,16 @@ public class Fellow {
     //Constructor of the class
     public Fellow(){}
 
+    public Fellow(long id, Student student, Project project, String cpf, String lattesCurriculum, Date birthDate) {
+        this.id = id;
+        this.student = student;
+        this.project = project;
+        this.cpf = cpf;
+        this.lattesCurriculum = lattesCurriculum;
+        this.birthDate = birthDate;
+    }
+
+    // Alternative constructor without id (for creating new instances)
     public Fellow(Student student, Project project, String cpf, String lattesCurriculum, Date birthDate) {
         this.student = student;
         this.project = project;
@@ -61,6 +72,14 @@ public class Fellow {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     

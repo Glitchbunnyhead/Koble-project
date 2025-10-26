@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Optional;
 
 
 import com.koble.koble.model.Company;
@@ -85,17 +84,32 @@ public class CompanyController {
     }
 
     //----- DELETE COMPANY FOR THE ID METHOD -------
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCompany(@PathVariable long id){
-        boolean deleted = companyDAO.delete(id);
-
-        if (deleted) {
+     @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCompany(@PathVariable long id){
+        //Receives the anwser of the method.
+        String status = companyDAO.delete(id);
+        
+        if (status.toLowerCase().contains("success") || 
+            status.toLowerCase().contains("deleted")) {
+            
             //Return status 204 No Content (but well succed opperetion).
-            return ResponseEntity.noContent().build();
-        } else {
-            // Return status 404 Not Found
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(status); 
+            
+        } 
+        
+        // Not founded case:
+        else if (status.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(status, HttpStatus.NOT_FOUND);
+        }
+        
+        // General error return status 500:
+        else if (status.toLowerCase().contains("error")) {
+            return new ResponseEntity<>(status, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        else {
+            // if any another anwser of the system:
+            return ResponseEntity.ok(status);
         }
     }
-    }
-
+}
