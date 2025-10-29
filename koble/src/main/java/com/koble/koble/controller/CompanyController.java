@@ -40,9 +40,14 @@ public class CompanyController {
     //Response Entity is a class that controls the reply HTTP(header,body and status). 
     public ResponseEntity<Company> createCompany(@RequestBody Company company){
         Company newCompany = companyDAO.create(company);
-        //Return the status 201 Created and the object created.
-        return new ResponseEntity<>(newCompany, HttpStatus.CREATED);
+        if (newCompany == null) {
+            //Return status 500 Internal Server Error if the object was not created.
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+            //Return the status 201 Created and the object created.
+            return new ResponseEntity<>(newCompany, HttpStatus.CREATED);
     }
+    
 
     //----- LIST COMPANY METHOD -------
     //Mapping for the HTTP Get verbe.

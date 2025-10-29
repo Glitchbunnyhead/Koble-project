@@ -41,8 +41,12 @@ public class TeacherController {
     //Response Entity is a class that controls the reply HTTP(header,body and status). 
     public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher){
         Teacher newTeacher = teacherDAO.create(teacher);
-        //Return the status 201 Created and the object created.
-        return new ResponseEntity<>(newTeacher, HttpStatus.CREATED);
+        if (newTeacher == null) {
+            //Return status 500 Internal Server Error if the object was not created.
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+            //Return the status 201 Created and the object created.
+            return new ResponseEntity<>(newTeacher, HttpStatus.CREATED);
     }
 
     //----- LIST TEACHER METHOD -------
