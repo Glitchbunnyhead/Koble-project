@@ -31,7 +31,7 @@ public class CompanyProjectDAO {
 
     //Method to create a new register in the Database (MySql code for do this action):
     //Note: This method creates a relationship between company and project in junction table
-    public String create(CompanyProject companyProject) {
+    public CompanyProject create(CompanyProject companyProject) {
         //Oppening the connection to the Database.
         this.connection.openConnection();
         //Insert SQL sentence for junction table (no ID needed - composite primary key)
@@ -55,8 +55,8 @@ public class CompanyProjectDAO {
         //SQLException is an exception that is thrown when there is an error with the SQL code.
         catch (SQLException e){
             e.printStackTrace();
-            return "Error creating company project relationship: " + e.getMessage(); 
-
+            System.out.println("Error creating company project relationship: " + e.getMessage()); 
+            return null;
         }
 
         //Closing the connection to the Database.
@@ -65,10 +65,10 @@ public class CompanyProjectDAO {
             connection.closeConnection();
         }
 
-        return "Company project relationship created successfully";
+        System.out.println("Company project relationship created successfully");
+        return companyProject;
     }
 
-    //---------------REVIEW THE INSTACIATION LOGIC---------------------------
     // Method to delete a register from the Database.
     // For junction tables, deletion is typically done by the composite key (company_id + project_id)
     public String delete(long companyId, long projectId) {

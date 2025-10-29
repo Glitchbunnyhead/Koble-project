@@ -13,11 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.koble.koble.model.Company;
-import com.koble.koble.model.Student;
 import com.koble.koble.model.Student;
 import com.koble.koble.persistence.dataAccessObject.StudentDAO;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 //It is an annotation that combine two other spring annotation: @Controller and @ResponseBody.
@@ -43,6 +40,10 @@ public class StudentController {
     //Response Entity is a class that controls the reply HTTP(header,body and status). 
     public ResponseEntity<Student> createCompany(@RequestBody Student student){
         Student newStudent = studentDAO.create(student);
+        if (newStudent == null) {
+            //Return status 500 Internal Server Error if the object was not created.
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         //Return the status 201 Created and the object created.
         return new ResponseEntity<>(newStudent, HttpStatus.CREATED);
     }

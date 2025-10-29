@@ -10,7 +10,9 @@ public abstract class Project {
     private String image;
     private String complementHours;
     private boolean fellowship;
+    private String fellowshipType;
     private double fellowValue;
+    private int fellowshipQuantity;
     private String requirements;
     private String title;
     private String subtitle;
@@ -25,7 +27,7 @@ public abstract class Project {
     }
 
     //Getters and Setters of the class
-    public Project(String complementHours, String coordenator, String description, String duration, double fellowValue, String image, String linkExtension, String requirements, boolean fellowship, String subtitle, String timeline, String title, String type, String typeId) {
+    public Project(String complementHours, String coordenator, String description, String duration, double fellowValue, String image, String linkExtension, String requirements, boolean fellowship, String subtitle, String timeline, String title, String type, String typeId,String fellowshipType, int fellowshipQuantity) {
         this.complementHours = complementHours;
         this.coordenator = coordenator;
         this.description = description;
@@ -40,6 +42,8 @@ public abstract class Project {
         this.title = title;
         this.type = type;
         this.typeId = typeId;
+        this.fellowshipType = fellowshipType;
+        this.fellowshipQuantity = fellowshipQuantity;
     }
 
     //Getters and Setters of the class
@@ -60,11 +64,11 @@ public abstract class Project {
         this.timeline = timeline;
     }
 
-    public String getLinkExtension() { // Usando o nome corrigido
+    public String getLinkExtension() {
         return linkExtension;
     }
 
-    public void setLinkExtension(String linkExtension) { // Usando o nome corrigido
+    public void setLinkExtension(String linkExtension) {
         this.linkExtension = linkExtension;
     }
 
@@ -164,6 +168,8 @@ public abstract class Project {
         this.typeId = typeId;
     }
 
+
+    
     // Métodos Padrão (Recomendados para POJOs)
     // ----------------------------------------------------
 
@@ -177,6 +183,40 @@ public abstract class Project {
         Project project = (Project) o;
         return id == project.id;
     }
+
+    
+    public boolean isFellowship() {
+        return fellowship;
+    }
+
+    public void setFellowship(boolean fellowship) {
+        this.fellowship = fellowship;
+    }
+
+    public String getFellowshipType() {
+        return fellowshipType;
+    }
+
+    public void setFellowshipType(String fellowshipType) {
+        this.fellowshipType = fellowshipType;
+    }
+
+    public double getFellowValue() {
+        return fellowValue;
+    }
+
+    public void setFellowValue(double fellowValue) {
+        this.fellowValue = fellowValue;
+    }
+
+     public int getFellowshipQuantity() {
+        return fellowshipQuantity;
+    }
+
+    public void setFellowshipQuantity(int fellowshipQuantity) {
+        this.fellowshipQuantity = fellowshipQuantity;
+    }
+
 
     /**
      * Gera um código hash consistente baseado no ID.
@@ -209,4 +249,6 @@ public abstract class Project {
                 ", typeId='" + typeId + '\'' +
                 '}';
     }
+
+   
 }

@@ -23,7 +23,7 @@ public class ProjectDAO {
     }
 
     //@Override
-    public String create(Project project) {
+    public Project create(Project project) {
         // Opening the connection to the Database
         this.connection.openConnection();
         
@@ -81,7 +81,7 @@ public class ProjectDAO {
             st.setString(7, project.getType()); // Using type as scholarship_type for now
             st.setDouble(8, project.getfellowValue());
             st.setString(9, project.getRequirements());
-            st.setInt(10, 0); // Default scholarship_quantity
+            st.setInt(10, project.getFellowshipQuantity()); // Default scholarship_quantity
             st.setString(11, project.getTitle());
             st.setString(12, project.getSubtitle());
             st.setString(13, project.getCoordenator());
@@ -111,12 +111,14 @@ public class ProjectDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return "Error creating project: " + e.getMessage();
+            System.out.println("Error creating project: " + e.getMessage());
+            return null;
         } finally {
             connection.closeConnection();
         }
 
-        return "Project created successfully";
+        System.out.println("Project created successfully");
+        return project;
     }
 
     //@Override
@@ -140,11 +142,112 @@ public class ProjectDAO {
     }
 
     //@Override
-    public String update(Project project) {
-        // Implementation would be similar to create but with UPDATE statement
-        // For now, returning a placeholder
-        return "Update method not implemented yet";
-    }
+   public Project update(long id, Project project) {
+        // Verify that the project ID was provided and valid (primitive long can't be null)
+        if (project.getId() <= 0) {
+            System.out.println("Error updating project: Project ID is missing or invalid.");
+            return null;
+        }
+        
+        // Opening the connection to the Database.
+        this.connection.openConnection();
+        
+        String sql = "UPDATE " + ConstantsDataBase.TABLE_PROJECT + " SET " +
+                ConstantsDataBase.PROJECT_COLUNA_TIMELINE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_DURATION + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_IMAGE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_SALARY + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_TITLE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_SUBTITLE + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_COORDINATOR + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION + " = ?, " +
+                ConstantsDataBase.PROJECT_COLUNA_TYPE + " = ?"; // 15º parâmetro
+
+        // Add type-specific fields
+        if (project instanceof ResearchProject) {
+            sql += ", " + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE + " = ?"; 
+        } else if (project instanceof ExtensionProject) {
+            sql += ", " + ConstantsDataBase.PROJECT_COLUNA_EXTENSION_TARGET_AUDIENCE + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_EXTENSION_SLOTS + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_EXTENSION_SELECTION_PROCESS + " = ?"; 
+        } else if (project instanceof EducationalProject) {
+            sql += ", " + ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION + " = ?, " + 
+                   ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_COURSE + " = ?"; 
+        }
+        
+        //Where clause to identify the record to update.
+        sql += " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?"; 
+
+        try {
+            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+
+            // Parameters common to all project types.
+            st.setString(1, project.getTimeline());
+            st.setString(2, project.getLinkExtension());
+            st.setString(3, project.getDuration());
+            st.setString(4, project.getImage());
+            st.setString(5, project.getComplementHours());
+            st.setBoolean(6, project.isfellowship());
+            st.setString(7, project.getFellowshipType()); // scholarship_type
+            st.setDouble(8, project.getfellowValue());
+            st.setString(9, project.getRequirements());
+            st.setInt(10, project.getFellowshipQuantity()); // scholarship_quantity 
+            st.setString(11, project.getTitle());
+            st.setString(12, project.getSubtitle());
+            st.setString(13, project.getCoordenator());
+            st.setString(14, project.getDescription());
+            st.setString(15, project.getType()); // project_type
+
+            // Especific parameters based on project type.
+            int paramIndex = 16;
+            if (project instanceof ResearchProject) {
+                ResearchProject research = (ResearchProject) project;
+                st.setString(paramIndex++, research.getAim());
+                st.setString(paramIndex++, research.getJustification());
+                st.setString(paramIndex++, research.getCourses());
+            } else if (project instanceof ExtensionProject) {
+                ExtensionProject extension = (ExtensionProject) project;
+                st.setString(paramIndex++, extension.getTargetAudience());
+                st.setInt(paramIndex++, extension.getSlots());
+                st.setString(paramIndex++, extension.getSelectionProcess());
+            } else if (project instanceof EducationalProject) {
+                EducationalProject educational = (EducationalProject) project;
+                st.setInt(paramIndex++, educational.getSlots());
+                st.setString(paramIndex++, educational.getJustification());
+                st.setString(paramIndex++, educational.getCourse());
+            }
+
+            //ID parameter for the WHERE clause.
+            st.setLong(paramIndex,id);
+
+            int rowsAffected = st.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Project updated successfully with ID: " + project.getId());
+                return project;
+            } else {
+                System.out.println("Project with ID " + project.getId() + " not found for update.");
+                return null; 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error updating project: " + e.getMessage());
+            return null;
+        } finally {
+            //Closing the connection.
+            connection.closeConnection();
+        }
+   }
 
     //@Override
     public Project read(long id) {
@@ -154,10 +257,12 @@ public class ProjectDAO {
                      " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
 
         try {
+        
             PreparedStatement st = connection.getConnection().prepareStatement(sql);
             st.setLong(1, id);
             ResultSet rs = st.executeQuery();
 
+            //If a record is found, create the appropriate Project subclass.
             if (rs.next()) {
                 project = createProjectFromResultSet(rs);
             }

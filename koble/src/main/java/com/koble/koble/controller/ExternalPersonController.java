@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.koble.koble.model.ExternalPerson;
 import com.koble.koble.persistence.dataAccessObject.ExternalPersonDAO;
 
@@ -23,7 +22,7 @@ import com.koble.koble.persistence.dataAccessObject.ExternalPersonDAO;
 //@RestController works like an simplified way of the RestApi.
 @RestController
 //@RequestMapping maps the HTTP requests and calls the referenced function.
-@RequestMapping("/api/external-person")
+@RequestMapping("/api/external_person")
 public class ExternalPersonController {
 
     private final ExternalPersonDAO externalPersonDAO;

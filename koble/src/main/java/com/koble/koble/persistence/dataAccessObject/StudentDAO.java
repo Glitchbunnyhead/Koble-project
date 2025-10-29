@@ -1,19 +1,15 @@
 package com.koble.koble.persistence.dataAccessObject;
 
 //Importing Java utilitys.
-import java.util.ArrayList;
-import java.util.List;
-
-//Importing Java SQL classes for database operations.
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
-//Importing Spring's Repository annotation to indicate that this class is a DAO component.
 import org.springframework.stereotype.Repository;
 
-//Importing the Student model, Crudl interface and MySqlConnection class.
 import com.koble.koble.model.Student;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.Crudl;
@@ -78,7 +74,6 @@ public class StudentDAO implements Crudl<Student> {
     }
 
     @Override
-    //---------------REVIEW THE INSTACIATION LOGIC---------------------------
     // Method to delete a register from the Database.
     public String delete(long id) {
         // Oppening the connection to the Database.
