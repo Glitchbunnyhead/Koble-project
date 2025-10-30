@@ -1,52 +1,57 @@
 package com.koble.koble.model;
 
+
 public abstract class Project {
 
-    //Declaring class attributes
     private long id;
+    private String title;
+    private String subtitle;
+    private String coordinator;
+    private String description;
     private String timeline;
-    private String linkExtension; 
+    private String externalLink; 
     private String duration;
     private String image;
     private String complementHours;
-    private boolean fellowship;
-    private String fellowshipType;
-    private double fellowValue;
-    private int fellowshipQuantity;
+    private boolean scholarshipAvailable;
+    private String scholarshipType;
+    private double salary;
     private String requirements;
-    private String title;
-    private String subtitle;
-    private String description;
-    private String coordenator;
+    private int scholarshipQuantity;
     private String type;
     private String typeId;
 
-    //Constructor of the class
 
     public Project() {
     }
 
-    //Getters and Setters of the class
-    public Project(String complementHours, String coordenator, String description, String duration, double fellowValue, String image, String linkExtension, String requirements, boolean fellowship, String subtitle, String timeline, String title, String type, String typeId,String fellowshipType, int fellowshipQuantity) {
+    public Project(String complementHours, String coordinator, String description, String duration, double salary, String image, String externalLink, String requirements, boolean scholarship, String subtitle, String timeline, String title, String type, String typeId,String scholarshipType, int scholarshipQuantity) {
         this.complementHours = complementHours;
-        this.coordenator = coordenator;
+        this.coordinator = coordinator;
         this.description = description;
         this.duration = duration;
-        this.fellowValue = fellowValue;
+        this.salary = salary;
         this.image = image;
-        this.linkExtension = linkExtension; // Usando o nome corrigido
+        this.externalLink = externalLink; 
         this.requirements = requirements;
-        this.fellowship = fellowship;
+        this.scholarshipAvailable = scholarship;
         this.subtitle = subtitle;
         this.timeline = timeline;
         this.title = title;
         this.type = type;
         this.typeId = typeId;
-        this.fellowshipType = fellowshipType;
-        this.fellowshipQuantity = fellowshipQuantity;
+        this.scholarshipType = scholarshipType;
+        this.scholarshipQuantity = scholarshipQuantity;
     }
 
-    //Getters and Setters of the class
+ 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Project project = (Project) o;
+        return id == project.id;
+    }
 
     public long getId() {
         return id;
@@ -64,12 +69,12 @@ public abstract class Project {
         this.timeline = timeline;
     }
 
-    public String getLinkExtension() {
-        return linkExtension;
+    public String getExternalLink() {
+        return externalLink;
     }
 
-    public void setLinkExtension(String linkExtension) {
-        this.linkExtension = linkExtension;
+    public void setExternalLink(String linkExtension) {
+        this.externalLink = linkExtension;
     }
 
     public String getDuration() {
@@ -96,20 +101,37 @@ public abstract class Project {
         this.complementHours = complementHours;
     }
 
-    public boolean isfellowship() {
-        return fellowship;
+   
+    public boolean isScholarshipAvailable() {
+        return scholarshipAvailable;
     }
 
-    public void setfellowship(boolean fellowship) {
-        this.fellowship = fellowship;
+    public void setScholarshipAvailable(boolean scholarshipAvailable) {
+        this.scholarshipAvailable = scholarshipAvailable;
     }
 
-    public double getfellowValue() {
-        return fellowValue;
+    public String getScholarshipType() {
+        return scholarshipType;
     }
 
-    public void setfellowValue(double fellowValue) {
-        this.fellowValue = fellowValue;
+    public void setScholarshipType(String scholarshipType) {
+        this.scholarshipType = scholarshipType;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public int getScholarshipQuantity() {
+        return scholarshipQuantity;
+    }
+
+    public void setScholarshipQuantity(int scholarshipQuantity) {
+        this.scholarshipQuantity = scholarshipQuantity;
     }
 
     public String getRequirements() {
@@ -144,12 +166,12 @@ public abstract class Project {
         this.description = description;
     }
 
-    public String getCoordenator() {
-        return coordenator;
+    public String getCoordinator() {
+        return coordinator;
     }
 
-    public void setCoordenator(String coordenator) {
-        this.coordenator = coordenator;
+    public void setCoordinator(String coordenator) {
+        this.coordinator = coordenator;
     }
 
     public String getType() {
@@ -169,82 +191,28 @@ public abstract class Project {
     }
 
 
-    
-    // Métodos Padrão (Recomendados para POJOs)
-    // ----------------------------------------------------
-
-    /**
-     * Compara objetos Project. Dois projetos são considerados iguais se tiverem o mesmo ID.
-     */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return id == project.id;
-    }
-
-    
-    public boolean isFellowship() {
-        return fellowship;
-    }
-
-    public void setFellowship(boolean fellowship) {
-        this.fellowship = fellowship;
-    }
-
-    public String getFellowshipType() {
-        return fellowshipType;
-    }
-
-    public void setFellowshipType(String fellowshipType) {
-        this.fellowshipType = fellowshipType;
-    }
-
-    public double getFellowValue() {
-        return fellowValue;
-    }
-
-    public void setFellowValue(double fellowValue) {
-        this.fellowValue = fellowValue;
-    }
-
-     public int getFellowshipQuantity() {
-        return fellowshipQuantity;
-    }
-
-    public void setFellowshipQuantity(int fellowshipQuantity) {
-        this.fellowshipQuantity = fellowshipQuantity;
-    }
-
-
-    /**
-     * Gera um código hash consistente baseado no ID.
-     */
     @Override
     public int hashCode() {
         return Long.hashCode(id);
     }
 
-    /**
-     * Retorna uma representação em String do objeto para facilitar o debugging.
-     */
+
     @Override
     public String toString() {
         return "Project{" +
                 "id=" + id +
                 ", timeline='" + timeline + '\'' +
-                ", linkExtension='" + linkExtension + '\'' +
+                ", externalLink='" + externalLink + '\'' +
                 ", duration='" + duration + '\'' +
                 ", image='" + image + '\'' +
                 ", complementHours='" + complementHours + '\'' +
-                ", fellowship=" + fellowship +
-                ", fellowValue=" + fellowValue +
+                ", scholarshipAvailble=" + scholarshipAvailable +
+                ", salary=" + salary +
                 ", requirements='" + requirements + '\'' +
                 ", title='" + title + '\'' +
                 ", subtitle='" + subtitle + '\'' +
                 ", description='" + description + '\'' +
-                ", coordenator='" + coordenator + '\'' +
+                ", coordinator='" + coordinator + '\'' +
                 ", type='" + type + '\'' +
                 ", typeId='" + typeId + '\'' +
                 '}';

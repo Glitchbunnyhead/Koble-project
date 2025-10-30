@@ -2,16 +2,20 @@ package com.koble.koble.model;
 
 public class EducationalProject extends Project {
 
-    //Declaring class attributes
     private int slots;
     private String justification;
     private String course;
 
-    //Constructor of the class
     public EducationalProject(){super();}
 
-    //Getters and Setters of the class
-
+    public EducationalProject(int slots, String justification, String course) {
+        super();
+        this.setType("Educational");
+        this.slots = slots;
+        this.justification = justification;
+        this.course = course;
+    }
+    
     public int getSlots() {
         return slots;
     }

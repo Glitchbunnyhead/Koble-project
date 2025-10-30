@@ -40,7 +40,7 @@ public class TeacherProjectDAO {
         //Insert SQL sentence for junction table (no ID needed - composite primary key)
         String sql = "INSERT INTO " + ConstantsDataBase.TABLE_TEACHERPROJECT + " (" + 
                      ConstantsDataBase.COLUMN_TEACHERID + ", " + 
-                     ConstantsDataBase.COLUMN_PROJECTID + ") VALUES (?, ?)";
+                     ConstantsDataBase.COLUMN_PROJECT_ID + ") VALUES (?, ?)";
 
         try{
             //Creating a PreparedStatement to execute the SQL sentece.
@@ -153,7 +153,7 @@ public class TeacherProjectDAO {
         // Delete SQL sentence using composite key
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_TEACHERPROJECT +
                 " WHERE " + ConstantsDataBase.COLUMN_TEACHERID + " = ? AND " +
-                ConstantsDataBase.COLUMN_PROJECTID + " = ?";
+                ConstantsDataBase.COLUMN_PROJECT_ID + " = ?";
 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -220,7 +220,7 @@ public class TeacherProjectDAO {
         this.connection.openConnection();
         // Delete SQL sentence
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_TEACHERPROJECT +
-                " WHERE " + ConstantsDataBase.COLUMN_PROJECTID + " = ?";
+                " WHERE " + ConstantsDataBase.COLUMN_PROJECT_ID + " = ?";
 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -255,7 +255,7 @@ public class TeacherProjectDAO {
         // Select SQL sentence.
         String sql = "SELECT COUNT(*) FROM " + ConstantsDataBase.TABLE_TEACHERPROJECT +
                 " WHERE " + ConstantsDataBase.COLUMN_TEACHERID + " = ? AND " +
-                ConstantsDataBase.COLUMN_PROJECTID + " = ?";
+                ConstantsDataBase.COLUMN_PROJECT_ID + " = ?";
                 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -353,7 +353,7 @@ public class TeacherProjectDAO {
         this.connection.openConnection();
         // Select SQL sentence.
         String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_TEACHERPROJECT +
-                " WHERE " + ConstantsDataBase.COLUMN_PROJECTID + " = ?";
+                " WHERE " + ConstantsDataBase.COLUMN_PROJECT_ID + " = ?";
 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.

@@ -1,15 +1,23 @@
 package com.koble.koble.model;
 
 public class ExtensionProject extends Project{
-    //Declaring class attributes
-    private String targetAudience;
+    private String targetAudience ;
     private int slots;
     private String selectionProcess;
 
-    //Constructor of the class
-    public ExtensionProject(){super();}
+    public ExtensionProject(){super();
+        this.setType("Extension");
 
-    //Getters and Setters of the class
+    }
+
+    public ExtensionProject(String targetAudience, int slots, String selectionProcess) {
+        super();
+        this.setType("Extension");
+        this.targetAudience = targetAudience;
+        this.slots = slots;
+        this.selectionProcess = selectionProcess;
+    }
+
 
     public String getTargetAudience() {
         return targetAudience;

@@ -1,107 +1,83 @@
 package com.koble.koble.controller;
-import java.util.List;
 
-import org.springframework.http.MediaType;
+import com.koble.koble.model.ResearchProject;
+import com.koble.koble.model.Project;
+import com.koble.koble.model.EducationalProject;
+import com.koble.koble.model.ExtensionProject;
+import com.koble.koble.model.ResearchProject;
+import com.koble.koble.persistence.dataAccessObject.ProjectDAO; // Presumindo que você tem essa classe DAO
+import com.koble.koble.persistence.dataAccessObject.ResearchProjectDAO;
+import com.koble.koble.persistence.dataAccessObject.EducationalProjectDAO;
+import com.koble.koble.persistence.dataAccessObject.ExtensionProjectDAO;
+
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
 
-import com.koble.koble.model.Company;
-import com.koble.koble.model.Project;
-import com.koble.koble.persistence.dataAccessObject.ProjectDAO;
-
-//It is an annotation that combine two other spring annotation: @Controller and @ResponseBody.
-//@Controller recieves the responsible for receiving user requests, processing them and returning a response.
-//@ResponseBody indicates that the response is connected to the body of the HTTP protocole(JSON).
-//@RestController works like an simplified way of the RestApi.
 @RestController
-@RequestMapping("api/project")
+@RequestMapping("/api/project")
 public class ProjectController {
 
-    private final ProjectDAO projectDAO;
+    // Injeção de todos os DAOs necessários para a orquestração
+    
+    @Autowired
+    private ProjectDAO projectDAO; // Para a tabela 'projetos' (base)
 
     @Autowired
-    public ProjectController(ProjectDAO projectDAO) {
-        this.projectDAO = projectDAO;
-    }
+    private ResearchProjectDAO researchDAO; // Para a tabela 'projetos_research' (tipada)
 
-    //----- CREATE NEW PROJECT METHOD -------
-    @PostMapping 
-    public ResponseEntity<Project> createProject(@RequestBody Project project) {
+    // Nota: Você injetaria também o EducationalProjectDAO e o ExtensionProjectDAO aqui.
+    @Autowired
+    private EducationalProjectDAO educationalDAO;
+
+    @Autowired
+    private ExtensionProjectDAO extensionDAO;
+
+
+    /**
+     * Endpoint para criar um novo Projeto de Pesquisa.
+     * Recebe o objeto ResearchProject completo no corpo da requisição.
+     */
+    @PostMapping("/research")
+    @Transactional 
+    public ResponseEntity<ResearchProject> criarProjetoPesquisa(@RequestBody ResearchProject newResearchProject) {
+
+        try {
+            // 1. INSERÇÃO NA TABELA BASE: Salvar os atributos comuns e obter o ID gerado.
+            // O projetoDAO.salvar() deve retornar o objeto com o ID preenchido.
+            // Nota: O método salvar deve aceitar o tipo Project ou o tipo ResearchProject (subclasse).
+            Project rootProject = projectDAO.create(newResearchProject);
+            
+            long idProject = rootProject.getId();
+            
+            if (idProject <= 0) {
+                // Deve haver uma exceção no DAO, mas é um bom guardrail
+                return new ResponseEntity("Persistente error: id not genereted.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // 2. INSERÇÃO NA TABELA TIPADA: Usar o ID gerado para salvar os atributos específicos.
+            // Como o objeto 'newResearchProject' já é um ResearchProject, ele contém todos os dados.
+            // O DAO específico só precisa do ID para a Foreign Key.
+            ResearchProject researchProject = researchDAO.create(newResearchProject, idProject);
+
+            // 3. Resposta de sucesso (com o objeto completo e o ID)
+            return new ResponseEntity<>(researchProject, HttpStatus.CREATED);
+
+        } catch (SQLException e) {
+            // O erro é capturado e, graças ao @Transactional, o banco de dados
+            // fará rollback automaticamente.
+            System.err.println("Erro ao criar Projeto de Pesquisa: " + e.getMessage());
+            return new ResponseEntity("Erro ao criar projeto: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+             System.err.println("Erro inesperado: " + e.getMessage());
+            return new ResponseEntity("Erro inesperado no servidor.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
-        Project newProject = projectDAO.create(project);
-        
-        if (newProject != null) {
-            //Return status 201 Created and the object created.
-            return new ResponseEntity<>(newProject, HttpStatus.CREATED);
-        } else {
-            //Return status 500 Internal Server Error if the oject was not created.
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    //----- LIST ALL PROJECT METHOD -------
-    @GetMapping
-    public ResponseEntity<List<Project>> getAllProjects() {
-        List<Project> projects = projectDAO.listAll();
-        // Returns 200 OK.
-        return new ResponseEntity<>(projects, HttpStatus.OK);
-    }
-
-    //----- GET PROJECT BY ID METHOD -------
-    @GetMapping("/{id}")
-    public ResponseEntity<Project> getProjectById(@PathVariable("id") long id) {
-        Project project = projectDAO.read(id);
-        
-        if (project != null) {
-            // Returns 200 OK
-            return new ResponseEntity<>(project, HttpStatus.OK);
-        } else {
-            // Returns 404 Not Found
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    //----- UPDATE PROJECT BY ID METHOD -------
-    public ResponseEntity<Project> updateProject(@PathVariable long id ,@RequestBody Project project){
-    Project updateProject = projectDAO.update(id, project);
-
-    //If project is not null, it means that the object was updated, and return 200 OK.
-    if(updateProject != null){
-        return ResponseEntity.ok(updateProject);
-    }
-
-    //If project is null, the system assumes it was a Bad Request case and return 400 Bad Request or 500 Internal Server Error.
-    else{
-        return ResponseEntity.notFound().build();
-    }
-}
-
-    //----- DELETE PROJECT BY ID METHOD -------
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCompany(@PathVariable long id){
-     //Receives the anwser of the method.
-        String status = projectDAO.delete(id);
-        
-        if (status.toLowerCase().contains("success") || 
-            status.toLowerCase().contains("deleted")) {
-            
-            //Return status 204 No Content (but well succed opperetion).
-            return ResponseEntity.ok(status); 
-            
-        } 
-        else {
-            //Return status 500 Internal Server Error if the object was not deleted.
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
+    // Você faria métodos POST similares para "/projetos/ensino" e "/projetos/extensao".
+    // ...
 }

@@ -1,14 +1,18 @@
 package com.koble.koble.persistence.dataAccessObject;
 
 //Importing Java utilitys.
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Importing Java SQL classes for database operations.
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+//Importing Spring's Repository annotation to indicate that this class is a DAO component.
 import org.springframework.stereotype.Repository;
 
+//Importing the ExternalPerson model, Crudl interface and MySqlConnection class.
 import com.koble.koble.model.ExternalPerson;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.Crudl;
@@ -50,8 +54,9 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
         //SQLException is an exception that is thrown when there is an error with the SQL code.
         catch (SQLException e){
             e.printStackTrace();
-            System.out.println("Error creating external user: " + e.getMessage()); 
-            return null;
+            System.out.println("Error creating external user: " + e.getMessage());
+            return null; 
+
         }
 
         //Closing the connection to the Database.
@@ -71,7 +76,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
         this.connection.openConnection();
         // Delete SQL sentence.
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_EXTERNALPERSON +
-                " WHERE " + ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + " = ?";
+                " WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -110,7 +115,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
                 ConstantsDataBase.COLUMN_EMAIL + "=?, " +
                 ConstantsDataBase.COLUMN_PASSWORD + "=?, " +
                 ConstantsDataBase.COLUMN_PHONE + "=? WHERE " +
-                ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + "=?;";
+                ConstantsDataBase.COLUMN_ID + "=?;";
 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -131,6 +136,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
                 st.executeUpdate();
             } else {
                 System.out.println("Error updating external user: object is null");
+                return null;
             }
         }
 
@@ -138,7 +144,6 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
         catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error updating external user: " + e.getMessage()); 
-            return null;
         }
 
         // Closing the connection to the Database.
@@ -159,7 +164,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
         this.connection.openConnection();
         // Select SQL sentence.
          String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_EXTERNALPERSON +
-                " WHERE " + ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + " = ?";
+                " WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
                 
         try {
             // Creating a PreparedStatement to execute the SQL sentence.
@@ -175,7 +180,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
             if (rs.next()) {
                 // Instantiating a new ExternalPerson object with the retrieved data.
                 externalPerson = new ExternalPerson();
-                externalPerson.setId(rs.getLong(ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID));
+                externalPerson.setId(rs.getLong(ConstantsDataBase.COLUMN_ID));
                 externalPerson.setName(rs.getString(ConstantsDataBase.COLUMN_NAME));
                 externalPerson.setEmail(rs.getString(ConstantsDataBase.COLUMN_EMAIL));
                 externalPerson.setPassword(rs.getString(ConstantsDataBase.COLUMN_PASSWORD));
@@ -222,7 +227,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
             while (rs.next()) {
                 // Instantiating a new ExternalPerson object for each row.
                 ExternalPerson externalPerson = new ExternalPerson();
-                externalPerson.setId(rs.getLong(ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID));
+                externalPerson.setId(rs.getLong(ConstantsDataBase.COLUMN_ID));
                 externalPerson.setName(rs.getString(ConstantsDataBase.COLUMN_NAME));
                 externalPerson.setEmail(rs.getString(ConstantsDataBase.COLUMN_EMAIL));
                 externalPerson.setPassword(rs.getString(ConstantsDataBase.COLUMN_PASSWORD));
@@ -248,5 +253,3 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
         return externalPeople;
     }
 }
-
-
