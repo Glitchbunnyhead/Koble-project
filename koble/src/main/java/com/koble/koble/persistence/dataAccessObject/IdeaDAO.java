@@ -288,7 +288,7 @@ public class IdeaDAO implements Crudl<Idea> {
         // Oppening the connection to the Database.
         this.connection.openConnection();
         // Select SQL sentence.
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_IDEA;
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_IDEA + ";";
 
         try {
             // Creating a Statement to execute the SQL sentence (No parameters needed, so a simple Statement is sufficient, 

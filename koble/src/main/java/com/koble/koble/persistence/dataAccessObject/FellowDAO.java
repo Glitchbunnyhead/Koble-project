@@ -60,7 +60,7 @@ public class FellowDAO implements Crudl<Fellow> {
         //Insert SQL sentence.
         String sql = "INSERT INTO " + ConstantsDataBase.TABLE_FELLOW + " (" + 
                      ConstantsDataBase.COLUMN_STUDENTID + ", " + 
-                     ConstantsDataBase.COLUMN_PROJECTID + ", " + 
+                     ConstantsDataBase.COLUMN_PROJECT_ID + ", " + 
                      ConstantsDataBase.COLUMN_CPF + ", " + 
                      ConstantsDataBase.COLUMN_LATTESCURRICULUM + ", " + 
                      ConstantsDataBase.COLUMN_BIRTHDATE + ") VALUES (?, ?, ?, ?, ?)";
@@ -169,7 +169,7 @@ public class FellowDAO implements Crudl<Fellow> {
         // Update SQL sentence.
         String sql = "UPDATE " + ConstantsDataBase.TABLE_FELLOW +
                 " SET " + ConstantsDataBase.COLUMN_STUDENTID + "=?, " +
-                ConstantsDataBase.COLUMN_PROJECTID + "=?, " +
+                ConstantsDataBase.COLUMN_PROJECT_ID + "=?, " +
                 ConstantsDataBase.COLUMN_CPF + "=?, " +
                 ConstantsDataBase.COLUMN_LATTESCURRICULUM + "=?, " +
                 ConstantsDataBase.COLUMN_BIRTHDATE + "=? WHERE " +
@@ -250,7 +250,7 @@ public class FellowDAO implements Crudl<Fellow> {
                 
                 // Load related Student and Project objects using their DAOs
                 long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
-                long projectId = rs.getLong(ConstantsDataBase.COLUMN_PROJECTID);
+                long projectId = rs.getLong(ConstantsDataBase.COLUMN_PROJECT_ID);
                 
                 // Load full Student object
                 Student student = studentDAO.read(studentId);
@@ -314,7 +314,7 @@ public class FellowDAO implements Crudl<Fellow> {
                 
                 // Load related Student and Project objects using their DAOs
                 long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
-                long projectId = rs.getLong(ConstantsDataBase.COLUMN_PROJECTID);
+                long projectId = rs.getLong(ConstantsDataBase.COLUMN_PROJECT_ID);
                 
                 // Load full Student object
                 Student student = studentDAO.read(studentId);

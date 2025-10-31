@@ -1,33 +1,29 @@
 package com.koble.koble.model;
 
-// Make sure to import the Project class if it's in another package
-// import your.package.Project;
-
 public class ResearchProject extends Project {
-
-    //Declaring class attributes
-    private String aim;
+    private String objective;
     private String justification;
-    private String course;
+    private String discipline;
 
-    //Constructor of the class
-    public ResearchProject(){super();}
 
-    public ResearchProject(String aim, String course, String justification) {
+    public ResearchProject(){super();
+        this.setType("Research");
+    }
+
+    public ResearchProject(String objective, String justification, String discipline) {
         super();
-        this.aim = aim;
-        this.course = course;
+        this.setType("Research");
+        this.objective = objective;
         this.justification = justification;
+        this.discipline = discipline;
     }
 
-    //Getters and Setters of the class
-
-    public String getAim() {
-        return aim;
+    public String getObjective() {
+        return objective;
     }
 
-    public void setAim(String aim) {
-        this.aim = aim;
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 
     public String getJustification() {
@@ -35,19 +31,19 @@ public class ResearchProject extends Project {
     }
 
     public void setJustification(String justification) {
-        this.justification = justification;
+        this.justification =  justification;
     }
 
-    public String getCourses() {
-        return course;
+    public String getDiscipline() {
+        return discipline;
     }
 
-    public void setCourses(String course) {
-        this.course = course;
+    public void setDiscipline(String discipline) {
+        this.discipline = discipline;
     }
 
+    
 
-
-
+    
 
 }
