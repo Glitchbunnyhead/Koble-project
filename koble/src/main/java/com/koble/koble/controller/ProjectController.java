@@ -1,83 +1,74 @@
 package com.koble.koble.controller;
 
-import com.koble.koble.model.ResearchProject;
 import com.koble.koble.model.Project;
-import com.koble.koble.model.EducationalProject;
-import com.koble.koble.model.ExtensionProject;
 import com.koble.koble.model.ResearchProject;
-import com.koble.koble.persistence.dataAccessObject.ProjectDAO; // Presumindo que você tem essa classe DAO
+import com.koble.koble.persistence.dataAccessObject.ProjectDAO;
 import com.koble.koble.persistence.dataAccessObject.ResearchProjectDAO;
-import com.koble.koble.persistence.dataAccessObject.EducationalProjectDAO;
-import com.koble.koble.persistence.dataAccessObject.ExtensionProjectDAO;
-
-import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Transactional; // Importe o Transacional
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/project")
-public class ProjectController {
-
-    // Injeção de todos os DAOs necessários para a orquestração
+@RequestMapping("/api/project") // Mudei para /project para ser mais genérico
+public class ProjectController { 
     
-    @Autowired
-    private ProjectDAO projectDAO; // Para a tabela 'projetos' (base)
+    // Injeção dos DAOs (agora no Controller)
+    private final ProjectDAO projectDAO;
+    private final ResearchProjectDAO researchDAO;
 
     @Autowired
-    private ResearchProjectDAO researchDAO; // Para a tabela 'projetos_research' (tipada)
-
-    // Nota: Você injetaria também o EducationalProjectDAO e o ExtensionProjectDAO aqui.
-    @Autowired
-    private EducationalProjectDAO educationalDAO;
-
-    @Autowired
-    private ExtensionProjectDAO extensionDAO;
-
+    public ProjectController(ProjectDAO projectDAO, ResearchProjectDAO researchDAO) {
+        this.projectDAO = projectDAO;
+        this.researchDAO = researchDAO;
+    }
 
     /**
-     * Endpoint para criar um novo Projeto de Pesquisa.
-     * Recebe o objeto ResearchProject completo no corpo da requisição.
+     * Cria um novo ResearchProject e Project base em uma única transação atômica.
+     * * @param researchProject Os dados do ResearchProject recebidos no corpo da requisição.
+     * @return ResponseEntity com o projeto criado ou um erro.
      */
     @PostMapping("/research")
-    @Transactional 
-    public ResponseEntity<ResearchProject> criarProjetoPesquisa(@RequestBody ResearchProject newResearchProject) {
-
+    @Transactional // A anotação @Transactional vai aqui, no Controller!
+    public ResponseEntity<ResearchProject> createResearchProject(@RequestBody ResearchProject researchProject) {
+        
+        // 1. Inserir na tabela base ('project')
+        Project baseProject = null;
         try {
-            // 1. INSERÇÃO NA TABELA BASE: Salvar os atributos comuns e obter o ID gerado.
-            // O projetoDAO.salvar() deve retornar o objeto com o ID preenchido.
-            // Nota: O método salvar deve aceitar o tipo Project ou o tipo ResearchProject (subclasse).
-            Project rootProject = projectDAO.create(newResearchProject);
+            baseProject = projectDAO.create(researchProject);
+        } catch (RuntimeException e) {
+            // A exceção de banco de dados do DAO já foi lançada. 
+            // O @Transactional fará o ROLLBACK.
+            System.err.println("Erro na criação da base do projeto. Rollback será executado.");
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        if (baseProject == null || baseProject.getId() == 0) {
+            // Isso só deve acontecer se o DAO retornar null, mas o ROLLBACK já deve ter ocorrido se houver exceção.
+             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        long projectId = baseProject.getId(); 
+
+        // 2. Inserir na tabela específica ('research') usando o ID gerado
+        try {
+            // O DAO de ResearchProject lança SQLException, que o Spring converte em RuntimeException
+            // ou, neste contexto, o @Transactional a detecta para o rollback.
+            ResearchProject createdResearch = researchDAO.create(researchProject, projectId);
             
-            long idProject = rootProject.getId();
-            
-            if (idProject <= 0) {
-                // Deve haver uma exceção no DAO, mas é um bom guardrail
-                return new ResponseEntity("Persistente error: id not genereted.", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+            // Se tudo correr bem até aqui, o Spring fará o COMMIT ao sair do método.
+            return new ResponseEntity<>(createdResearch, HttpStatus.CREATED);
 
-            // 2. INSERÇÃO NA TABELA TIPADA: Usar o ID gerado para salvar os atributos específicos.
-            // Como o objeto 'newResearchProject' já é um ResearchProject, ele contém todos os dados.
-            // O DAO específico só precisa do ID para a Foreign Key.
-            ResearchProject researchProject = researchDAO.create(newResearchProject, idProject);
-
-            // 3. Resposta de sucesso (com o objeto completo e o ID)
-            return new ResponseEntity<>(researchProject, HttpStatus.CREATED);
-
-        } catch (SQLException e) {
-            // O erro é capturado e, graças ao @Transactional, o banco de dados
-            // fará rollback automaticamente.
-            System.err.println("Erro ao criar Projeto de Pesquisa: " + e.getMessage());
-            return new ResponseEntity("Erro ao criar projeto: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
-             System.err.println("Erro inesperado: " + e.getMessage());
-            return new ResponseEntity("Erro inesperado no servidor.", HttpStatus.INTERNAL_SERVER_ERROR);
+            // Captura qualquer exceção (incluindo SQL rollbacks) e retorna 500.
+            // O @Transactional já foi acionado para fazer o ROLLBACK.
+            System.err.println("Erro na criação do detalhe do projeto. Rollback total será executado.");
+            e.printStackTrace();
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     
-    // Você faria métodos POST similares para "/projetos/ensino" e "/projetos/extensao".
-    // ...
+    // Outros métodos HTTP (GET, PUT, DELETE) para ProjectDAO iriam aqui
 }
