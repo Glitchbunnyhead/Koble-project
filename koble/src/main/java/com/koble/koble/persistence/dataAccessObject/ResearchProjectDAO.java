@@ -36,10 +36,10 @@ public class ResearchProjectDAO {
             // 1. O ID do Projeto Base (FK)
             st.setLong(1, idProject);
             // 2. Atributos Específicos de ResearchProject
-            st.setString(2, researchProject.getAim());
+            st.setString(2, researchProject.getObjective());
             st.setString(3, researchProject.getJustification());
             // Atenção: A Model usa 'course', mas o getter é 'getCourses()'. Usando 'getCourses()'
-            st.setString(4, researchProject.getCourses()); 
+            st.setString(4, researchProject.getDiscipline()); 
 
             st.executeUpdate();
 
@@ -101,9 +101,9 @@ public class ResearchProjectDAO {
 
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
 
-            st.setString(1, researchProject.getAim());
+            st.setString(1, researchProject.getObjective());
             st.setString(2, researchProject.getJustification());
-            st.setString(3, researchProject.getCourses()); // Usando o getter 'getCourses()'
+            st.setString(3, researchProject.getDiscipline()); // Usando o getter 'getCourses()'
             st.setLong(4, id);
 
 
@@ -146,9 +146,9 @@ public class ResearchProjectDAO {
                     // Seta o ID do Projeto Base
                     researchProject.setId(id);
                     // Seta os atributos específicos
-                    researchProject.setAim(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
+                    researchProject.setObjective(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
                     researchProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION));
-                    researchProject.setCourses(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
+                    researchProject.setDiscipline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
                 }
             }
 
@@ -179,9 +179,9 @@ public class ResearchProjectDAO {
                 ResearchProject researchProject = new ResearchProject();
                 // O ID do projeto base também deve ser carregado
                 researchProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID)); 
-                researchProject.setAim(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
+                researchProject.setObjective(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
                 researchProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION));
-                researchProject.setCourses(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
+                researchProject.setDiscipline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
 
                 researchProjects.add(researchProject);
             }
