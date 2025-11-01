@@ -53,7 +53,7 @@ public class ResearchProjectDAO {
 
     // --- D E L E T E ---
     public String delete(long id) {
-        // REMOVIDO: this.connection.openConnection();
+        this.connection.openConnection();
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_RESEARCHPROJECT +
                      " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
 
@@ -72,7 +72,7 @@ public class ResearchProjectDAO {
             // Lança RuntimeException para Rollback
             throw new RuntimeException("Error deleting Research Project: " + e.getMessage(), e);
         }
-        // REMOVIDO: finally { connection.closeConnection(); }
+        finally { connection.closeConnection(); }
     }
 
     // --- U P D A T E ---
@@ -82,13 +82,13 @@ public class ResearchProjectDAO {
             return null;
         }
 
-        // REMOVIDO: this.connection.openConnection();
+        this.connection.openConnection();
 
         String sql = "UPDATE " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " SET "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE + " = ? "
-                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
 
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
 
@@ -114,7 +114,7 @@ public class ResearchProjectDAO {
             // Lança RuntimeException para Rollback
             throw new RuntimeException("Error updating Research Project: " + e.getMessage(), e);
         } 
-        // REMOVIDO: finally { connection.closeConnection(); }
+        finally { connection.closeConnection(); }
     }
 
     // --- R E A D ---

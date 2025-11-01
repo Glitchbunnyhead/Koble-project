@@ -85,7 +85,7 @@ public class EducationalProjectDAO {
                 + ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS + " = ?, "
                 +ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION + "= ?,"
                 +ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_COURSE + " = ? "
-                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
 
         try {
             PreparedStatement st = connection.getConnection().prepareStatement(sql);

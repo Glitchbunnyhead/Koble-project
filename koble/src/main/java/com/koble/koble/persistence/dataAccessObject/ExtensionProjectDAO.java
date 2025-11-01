@@ -85,7 +85,7 @@ public class ExtensionProjectDAO {
                 + ConstantsDataBase.PROJECT_COLUNA_EXTENSION_TARGET_AUDIENCE + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_EXTENSION_SLOTS + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_EXTENSION_SELECTION_PROCESS + " = ? "
-                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
 
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
 

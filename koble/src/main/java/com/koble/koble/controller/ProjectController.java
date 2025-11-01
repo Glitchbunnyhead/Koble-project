@@ -172,16 +172,205 @@ public class ProjectController {
     }
 
         @GetMapping("/educational")
-    public ResponseEntity<List<EducationalProject>> readAllEducationalProject(){
+    public ResponseEntity<List<EducationalProject>> readAllEducationalProjects(){
         List<EducationalProject> educationalProjects = educationalDAO.listAll();
 
         return ResponseEntity.ok(educationalProjects);
     }
 
         @GetMapping("/extension")
-    public ResponseEntity<List<ExtensionProject>> readAllExtentionProject(){
+    public ResponseEntity<List<ExtensionProject>> readAllExtentionProjects(){
         List<ExtensionProject> extensionProjects = extensionDAO.listAll();
 
         return ResponseEntity.ok(extensionProjects);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Project>> readAllProjects(){
+        List<Project> allProjects = projectDAO.listAll();
+
+        return ResponseEntity.ok(allProjects);
+    }
+
+
+    @PutMapping("/research/{id}")
+    @Transactional
+    public ResponseEntity<ResearchProject> updateResearchProject(@PathVariable long id ,@RequestBody ResearchProject newProject){
+        Project rootProject = projectDAO.update(id, newProject);
+        ResearchProject updateResearchProject = researchDAO.update(id, newProject);
+
+        if(updateResearchProject != null){
+            return ResponseEntity.ok(updateResearchProject);
+        }
+
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/educational/{id}")
+    @Transactional
+    public ResponseEntity<EducationalProject> updateEducationalProject(@PathVariable long id ,@RequestBody EducationalProject newProject){
+        Project rootProject = projectDAO.update(id, newProject);
+        EducationalProject updateEducationalProject = educationalDAO.update(id, newProject);
+
+        if(updateEducationalProject != null){
+            return ResponseEntity.ok(updateEducationalProject);
+        }
+
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @PutMapping("/extension/{id}")
+    @Transactional
+    public ResponseEntity<ExtensionProject> updateExtensionProject(@PathVariable long id ,@RequestBody ExtensionProject newProject){
+        Project rootProject = projectDAO.update(id, newProject);
+        ExtensionProject updateExtensionProject = extensionDAO.update(id, newProject);
+
+        if(updateExtensionProject != null){
+            return ResponseEntity.ok(updateExtensionProject);
+        }
+
+        else{
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    @DeleteMapping("/research/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteResearch(@PathVariable long id){
+        String statusResearch = researchDAO.delete(id);
+
+        if (statusResearch.toLowerCase().contains("success") || 
+            statusResearch.toLowerCase().contains("deleted")) {
+            
+            System.out.println(statusResearch); 
+
+            String statusProject = projectDAO.delete(id);
+            if (statusResearch.toLowerCase().contains("success") || 
+            statusResearch.toLowerCase().contains("deleted")) { 
+                return ResponseEntity.ok(statusProject);
+            }
+
+            else if (statusResearch.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusResearch, HttpStatus.NOT_FOUND);
+        }
+
+            else if (statusResearch.toLowerCase().contains("error")) {
+                return new ResponseEntity<>(statusResearch, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            else {
+                return ResponseEntity.ok(statusResearch);
+            }
+
+            }
+        else if (statusResearch.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusResearch, HttpStatus.NOT_FOUND);
+        }
+
+        else if (statusResearch.toLowerCase().contains("error")) {
+            return new ResponseEntity<>(statusResearch, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        else {
+            return ResponseEntity.ok(statusResearch);
+        }
 }
+
+@DeleteMapping("/educational/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteEducational(@PathVariable long id){
+        String statusEducational = educationalDAO.delete(id);
+
+        if (statusEducational.toLowerCase().contains("success") || 
+            statusEducational.toLowerCase().contains("deleted")) {
+            
+            System.out.println(statusEducational); 
+
+            String statusProject = projectDAO.delete(id);
+            if (statusEducational.toLowerCase().contains("success") || 
+            statusEducational.toLowerCase().contains("deleted")) { 
+                return ResponseEntity.ok(statusProject);
+            }
+
+            else if (statusEducational.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusEducational, HttpStatus.NOT_FOUND);
+        }
+
+            else if (statusEducational.toLowerCase().contains("error")) {
+                return new ResponseEntity<>(statusEducational, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            else {
+                return ResponseEntity.ok(statusEducational);
+            }
+
+            }
+        else if (statusEducational.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusEducational, HttpStatus.NOT_FOUND);
+        }
+
+        else if (statusEducational.toLowerCase().contains("error")) {
+            return new ResponseEntity<>(statusEducational, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        else {
+            return ResponseEntity.ok(statusEducational);
+        }
+    }
+
+
+    @DeleteMapping("/extension/{id}")
+    @Transactional
+    public ResponseEntity<String> deleteExtension(@PathVariable long id){
+        String statusExtension = educationalDAO.delete(id);
+
+        if (statusExtension.toLowerCase().contains("success") || 
+            statusExtension.toLowerCase().contains("deleted")) {
+            
+            System.out.println(statusExtension); 
+
+            String statusProject = projectDAO.delete(id);
+            if (statusExtension.toLowerCase().contains("success") || 
+            statusExtension.toLowerCase().contains("deleted")) { 
+                return ResponseEntity.ok(statusProject);
+            }
+
+            else if (statusExtension.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusExtension, HttpStatus.NOT_FOUND);
+        }
+
+            else if (statusExtension.toLowerCase().contains("error")) {
+                return new ResponseEntity<>(statusExtension, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            else {
+                return ResponseEntity.ok(statusExtension);
+            }
+
+            }
+        else if (statusExtension.toLowerCase().contains("not found")) {
+            return new ResponseEntity<>(statusExtension, HttpStatus.NOT_FOUND);
+        }
+
+        else if (statusExtension.toLowerCase().contains("error")) {
+            return new ResponseEntity<>(statusExtension, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        else {
+            return ResponseEntity.ok(statusExtension);
+        }
+    }
+
+
+
+
+
+}
+
+
+

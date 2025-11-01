@@ -89,7 +89,7 @@ public class ProjectDAO implements Crudl<Project> {
     // --- D E L E T E ---
     @Override
     public String delete(long id) {
-        // REMOVIDO: this.connection.openConnection();
+        this.connection.openConnection();
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_PROJECT + 
                      " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
 
@@ -102,7 +102,7 @@ public class ProjectDAO implements Crudl<Project> {
             // Lançamos a exceção aqui também para que a transação possa ser revertida
             throw new RuntimeException("Database error during project deletion.", e);
         } 
-        // REMOVIDO: finally { connection.closeConnection(); }
+        finally { connection.closeConnection(); }
     }
 
     // --- U P D A T E ---
@@ -113,14 +113,25 @@ public class ProjectDAO implements Crudl<Project> {
             return null;
         }
         
-        // REMOVIDO: this.connection.openConnection();
+        this.connection.openConnection();
         
-        String sql = "UPDATE " + ConstantsDataBase.TABLE_PROJECT + " SET "
-                + ConstantsDataBase.PROJECT_COLUNA_TIMELINE + " = ?, "
-                + ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + " = ?, "
-                // ... (restante das colunas) ...
-                + ConstantsDataBase.PROJECT_COLUNA_TYPE + " = ? "
-                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+        String sql = "UPDATE " + ConstantsDataBase.TABLE_PROJECT + " SET " 
+            + ConstantsDataBase.PROJECT_COLUNA_TIMELINE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_DURATION + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_IMAGE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_SALARY + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_TITLE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_SUBTITLE + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_COORDINATOR + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION + " = ?, "
+            + ConstantsDataBase.PROJECT_COLUNA_TYPE + " = ? " 
+            + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;"; 
 
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
 
@@ -155,7 +166,7 @@ public class ProjectDAO implements Crudl<Project> {
             e.printStackTrace();
             throw new RuntimeException("Database error during project update.", e);
         }
-        // REMOVIDO: finally { connection.closeConnection(); }
+         finally { connection.closeConnection(); }
     }
 
     // --- R E A D ---
@@ -187,7 +198,7 @@ public class ProjectDAO implements Crudl<Project> {
     @Override
     public List<Project> listAll() {
         List<Project> projects = new ArrayList<>();
-        // REMOVIDO: this.connection.openConnection();
+        this.connection.openConnection();
         String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + ";";
 
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql);
@@ -202,7 +213,7 @@ public class ProjectDAO implements Crudl<Project> {
             e.printStackTrace();
             throw new RuntimeException("Database error during project listing.", e);
         } 
-        // REMOVIDO: finally { // ... close connection and statements }
+        finally {  connection.closeConnection(); }
 
         return projects;
     }
