@@ -118,24 +118,40 @@ public class EducationalProjectDAO {
     public EducationalProject read(long id) {
         EducationalProject educationalProject  = null;
         this.connection.openConnection();
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_EDUCATIONALPROJECT + 
-                     " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p INNER JOIN " + ConstantsDataBase.TABLE_EDUCATIONALPROJECT + " e ON p.project_id = e.project_id WHERE p." + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
 
         try {
         
             PreparedStatement st = connection.getConnection().prepareStatement(sql);
             st.setLong(1, id);
-            ResultSet rs = st.executeQuery();
 
-            if (rs.next()) {
-                educationalProject = new EducationalProject();
-                educationalProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
-                educationalProject.setSlots(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS));
-                educationalProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION));
-                educationalProject.setCourse(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_COURSE));
+            try (ResultSet rs = st.executeQuery()) {
 
+                if (rs.next()) {
+                    educationalProject = new EducationalProject();
+                    educationalProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
+                    educationalProject.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
+                    educationalProject.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
+                    educationalProject.setDuration(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DURATION));
+                    educationalProject.setImage(rs.getString(ConstantsDataBase.PROJECT_COLUNA_IMAGE));
+                    educationalProject.setComplementHours(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS));
+                    educationalProject.setScholarshipAvailable(rs.getBoolean(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE));
+                    educationalProject.setScholarshipType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE));
+                    educationalProject.setSalary(rs.getDouble(ConstantsDataBase.PROJECT_COLUNA_SALARY));
+                    educationalProject.setRequirements(rs.getString(ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS));
+                    educationalProject.setScholarshipQuantity(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY));
+                    educationalProject.setTitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TITLE));
+                    educationalProject.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
+                    educationalProject.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
+                    educationalProject.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
+                    educationalProject.setType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE));
+                    educationalProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
+                    educationalProject.setSlots(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS));
+                    educationalProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION));
+                    educationalProject.setCourse(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_COURSE));
+
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error reading project: " + e.getMessage());
@@ -150,7 +166,7 @@ public class EducationalProjectDAO {
     public List<EducationalProject> listAll() {
     List<EducationalProject> educationalProjects = new ArrayList<>();
     this.connection.openConnection();
-    String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_EDUCATIONALPROJECT + ";";
+    String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p INNER JOIN " + ConstantsDataBase.TABLE_EDUCATIONALPROJECT + " e ON p.project_id = e.project_id ;";
 
     PreparedStatement st = null;
     ResultSet rs = null;
@@ -163,7 +179,25 @@ public class EducationalProjectDAO {
 
         // Looping through all results and creating Project instances via helper.
         while (rs.next()) {
+
             EducationalProject educationalProject = new EducationalProject();
+            educationalProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
+            educationalProject.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
+            educationalProject.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
+            educationalProject.setDuration(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DURATION));
+            educationalProject.setImage(rs.getString(ConstantsDataBase.PROJECT_COLUNA_IMAGE));
+            educationalProject.setComplementHours(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS));
+            educationalProject.setScholarshipAvailable(rs.getBoolean(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE));
+            educationalProject.setScholarshipType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE));
+            educationalProject.setSalary(rs.getDouble(ConstantsDataBase.PROJECT_COLUNA_SALARY));
+            educationalProject.setRequirements(rs.getString(ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS));
+            educationalProject.setScholarshipQuantity(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY));
+            educationalProject.setTitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TITLE));
+            educationalProject.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
+            educationalProject.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
+            educationalProject.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
+            educationalProject.setType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE));
+
             educationalProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
             educationalProject.setSlots(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS));
             educationalProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION));
