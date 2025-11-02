@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.koble.koble.model.CompanyProject;
+import com.koble.koble.model.Company;
+import com.koble.koble.model.Project;
+import com.koble.koble.persistence.dataAccessObject.CompanyDAO;
 import com.koble.koble.persistence.dataAccessObject.CompanyProjectDAO;
+import com.koble.koble.persistence.dataAccessObject.ProjectDAO;
 
 
 //It is an annotation that combine two other spring annotation: @Controller and @ResponseBody.
@@ -27,22 +31,46 @@ import com.koble.koble.persistence.dataAccessObject.CompanyProjectDAO;
 public class CompanyProjectController{
 
      private final CompanyProjectDAO companyProjectDAO;
+     private final CompanyDAO companyDAO;
+     private final ProjectDAO projectDAO;
 
     //Annotation for dependence injection.
     @Autowired
-    public CompanyProjectController(CompanyProjectDAO companyProjectDAO){
+    public CompanyProjectController(CompanyProjectDAO companyProjectDAO, CompanyDAO companyDAO, ProjectDAO projectDAO){
         this.companyProjectDAO = companyProjectDAO;
+        this.companyDAO = companyDAO;
+        this.projectDAO = projectDAO;
+   
     }
 
-      //----- CREATE NEW COMPANY METHOD -------
-    //Mapping for the HTTP Post verbe.
     @PostMapping
-    //Response Entity is a class that controls the reply HTTP(header,body and status). 
     public ResponseEntity<CompanyProject> createCompany(@RequestBody CompanyProject companyProject){
+        
+        // 1. Validar se a Company existe
+        if (!companyDAO.exists(companyProject.getCompanyId())) {
+            // Retorna 404 Not Found se a Company não existir
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND); 
+        }
+
+        // 2. Validar se o Project existe (ESTE É O FOCO DO SEU ERRO)
+        if (!projectDAO.exists(companyProject.getProjectId())) {
+            // Retorna 404 Not Found se o Project não existir
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        // 3. Tentar criar o relacionamento no BD
         CompanyProject newCompanyProject = companyProjectDAO.create(companyProject);
-        //Return the status 201 Created and the object created.
+        
+        if (newCompanyProject == null) {
+            // Se retornar null, provavelmente houve um erro interno ou (menos comum) 
+            // a violação de chave estrangeira que você estava tendo.
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        // Retorna o status 201 Created e o objeto criado.
         return new ResponseEntity<>(newCompanyProject, HttpStatus.CREATED);
     }
+
 
     //----- LIST COMPANY PROJECT RELATIONSHIPS METHOD -------
     @GetMapping
@@ -52,10 +80,11 @@ public class CompanyProjectController{
         return ResponseEntity.ok(companyProjects);
     }
 
+
     //----- FIND PROJECTS BY COMPANY ID METHOD -------
-    @GetMapping("/company/{companyId}")
-    public ResponseEntity<List<CompanyProject>> findProjectsByCompanyId(@PathVariable Long companyId){
-        List<CompanyProject> companyProjects = companyProjectDAO.findProjectsByCompanyId(companyId);
+    @GetMapping("/projects/{companyId}")
+    public ResponseEntity<List<Project>> findProjectsByCompanyId(@PathVariable Long companyId){
+        List<Project> companyProjects = companyProjectDAO.findProjectsByCompanyId(companyId);
         
         if (companyProjects.isEmpty()) {
             //Return 404 Not Found if no relationships are found for the given company ID.
@@ -67,17 +96,17 @@ public class CompanyProjectController{
     }
 
     //----- FIND COMPANIES BY PROJECT ID METHOD -------
-    @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<CompanyProject>> findCompaniesByProjectId(@PathVariable Long projectId){
-        List<CompanyProject> companyProjects = companyProjectDAO.findCompaniesByProjectId(projectId);
+    @GetMapping("/companies/{projectId}")
+    public ResponseEntity<List<Company>> findCompaniesByProjectId(@PathVariable Long projectId){
+        List<Company> companies = companyProjectDAO.findCompaniesByProjectId(projectId);
         
-        if (companyProjects.isEmpty()) {
+        if (companies.isEmpty()) {
             //Return 404 Not Found if no relationships are found for the given project ID.
             return ResponseEntity.notFound().build();
         } 
         
         //Return 200 OK and the list of relationships.
-        return ResponseEntity.ok(companyProjects);
+        return ResponseEntity.ok(companies);
     }
 
     //----- DELETE COMPANY PROJECT RELATIONSHIP BY ID METHOD -------
@@ -152,5 +181,7 @@ public class CompanyProjectController{
              return ResponseEntity.ok(status); 
         }
     }
+
+    
 }
 

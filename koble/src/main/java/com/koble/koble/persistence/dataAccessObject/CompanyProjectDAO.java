@@ -15,18 +15,23 @@ import org.springframework.stereotype.Repository;
 
 //Importing the CompanyProject model, and MySqlConnection class.
 import com.koble.koble.model.CompanyProject;
-import com.koble.koble.model.Company;
+import com.koble.koble.model.Project;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.MySqlConnection;
+import com.koble.koble.model.Company;;
 
 @Repository
 public class CompanyProjectDAO {
     //Creating a MySqlConnection attributes.
     private final MySqlConnection connection;
-
+    private final ProjectDAO projectDAO;
+    private final CompanyDAO companyDAO;
     //Class constructor.
-    public CompanyProjectDAO(MySqlConnection connection){
+    public CompanyProjectDAO(MySqlConnection connection, ProjectDAO projectDAO, CompanyDAO companyDAO){
         this.connection = connection;
+        this.projectDAO = projectDAO;
+        this.companyDAO = companyDAO;
+
     }
 
     //Method to create a new register in the Database (MySql code for do this action):
@@ -44,8 +49,8 @@ public class CompanyProjectDAO {
             //PreparedStatemnt is an interface. Is instantied by an anonymous class.
             PreparedStatement st = connection.getConnection().prepareStatement(sql);
             
-            st.setLong(1, companyProject.getCompany().getId());
-            st.setLong(2, companyProject.getProject().getId());
+            st.setLong(1, companyProject.getCompanyId());
+            st.setLong(2, companyProject.getProjectId());
 
             //Executing the insert operation.
             st.executeUpdate();
@@ -214,165 +219,118 @@ public class CompanyProjectDAO {
         return exists;
     }
 
-    // Method to list all company-project relationships from the Database.
+        // Method to list all company-project relationships from the Database.
     public List<CompanyProject> listAll() {
         // List to store all CompanyProject objects.
         List<CompanyProject> companyProjects = new ArrayList<>();
-        // Oppening the connection to the Database.
+        // Opening the connection to the Database.
         this.connection.openConnection();
         // Select SQL sentence.
         String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_COMPANYPROJECT;
 
         try {
-            // Creating a Statement to execute the SQL sentence (No parameters needed, so a simple Statement is sufficient, 
-            // but sticking to PreparedStatement for consistency is also fine).
             PreparedStatement st = connection.getConnection().prepareStatement(sql);
-            
-            // Executing the query and getting the result set.
             ResultSet rs = st.executeQuery();
 
-            // Looping through all results.
             while (rs.next()) {
-                // Instantiating a new CompanyProject object for each row.
                 CompanyProject companyProject = new CompanyProject();
-                
-                // Note: These would need corresponding DAO methods to load Company and Project objects
-                // For now, creating empty objects - this should be improved with proper loading
-                Company company = new Company();
-                company.setId(rs.getLong("company_id"));
-                companyProject.setCompany(company);
-                
-                // Cannot instantiate abstract Project class directly
-                // This should be improved to load actual project via ProjectDAO
-                companyProject.setProject(null);
-                
-                // Adding the companyProject object to the list.
+                companyProject.setCompanyId(rs.getLong("company_id"));
+                companyProject.setProjectId(rs.getLong("project_id"));
                 companyProjects.add(companyProject);
             }
-
-        }
-        // SQLException is an exception that is thrown when there is an error with the SQL code.
-        catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Error reading company projects: " + e.getMessage());        
-        }
-
-        // Closing the connection to the Database.
-        finally {
+        } finally {
             connection.closeConnection();
         }
 
-        // Returns the list of company projects (can be empty).
         return companyProjects;
     }
 
     // Additional method to find all projects by company ID
-    public List<CompanyProject> findProjectsByCompanyId(long companyId) {
-        // List to store CompanyProject objects for a specific company.
-        List<CompanyProject> companyProjects = new ArrayList<>();
-        // Oppening the connection to the Database.
-        this.connection.openConnection();
-        // Select SQL sentence.
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_COMPANYPROJECT +
-                " WHERE company_id = ?";
+ public List<Project> findProjectsByCompanyId(long companyId) {
+    List<Project> projects = new ArrayList<>();
+    this.connection.openConnection();
+    
+    String sql = "SELECT " + ConstantsDataBase.PROJECT_COLUNA_ID + " FROM " + ConstantsDataBase.TABLE_COMPANYPROJECT +
+            " WHERE company_id = ?;";
 
-        try {
-            // Creating a PreparedStatement to execute the SQL sentence.
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
-            
-            // Setting the value of the PreparedStatement (the company's ID).
-            st.setLong(1, companyId); 
-            
-            // Executing the query and getting the result set.
-            ResultSet rs = st.executeQuery();
+    try {
+        PreparedStatement st = connection.getConnection().prepareStatement(sql);
 
-            // Looping through all results.
-            while (rs.next()) {
-                // Instantiating a new CompanyProject object for each row.
-                CompanyProject companyProject = new CompanyProject();
-                
-                // Note: These would need corresponding DAO methods to load Company and Project objects
-                // For now, creating empty objects - this should be improved with proper loading
-                Company company = new Company();
-                company.setId(rs.getLong("company_id"));
-                companyProject.setCompany(company);
-                
-                // Cannot instantiate abstract Project class directly
-                // This should be improved to load actual project via ProjectDAO
-                companyProject.setProject(null);
-                
-                // Adding the companyProject object to the list.
-                companyProjects.add(companyProject);
+        // O PreparedStatement também deveria idealmente estar em um try-with-resources,
+        // mas focando apenas nas chaves do seu trecho:
+        st.setLong(1, companyId);
+
+        try (ResultSet rs = st.executeQuery()) {
+        // 2. Iterar sobre todos os project_id encontrados
+        while (rs.next()) {
+            long projectId = rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID); // *Ajuste: usar a constante para o nome da coluna é uma boa prática*
+            
+            
+            Project project = projectDAO.read(projectId);
+            
+            // 4. Adicionar à lista se o projeto foi encontrado (pode ser null se o projeto original foi deletado)
+            if (project != null) {
+                projects.add(project);
             }
+        } // <--- Fim do bloco 'try' do ResultSet (try-with-resources)
+        } // <--- Fechamento do 'try-with-resources'
 
-        }
-        // SQLException is an exception that is thrown when there is an error with the SQL code.
-        catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error reading projects by company ID: " + e.getMessage());        
-        }
-
-        // Closing the connection to the Database.
-        finally {
-            connection.closeConnection();
-        }
-
-        // Returns the list of company projects for the specific company (can be empty).
-        return companyProjects;
+    } catch (SQLException e) { // <--- Início do 'catch' para o 'try' principal
+        e.printStackTrace();
+        System.out.println("Error reading projects by company ID: " + e.getMessage());        
+    } 
+    finally {
+        connection.closeConnection();
     }
+ 
+    return projects;
+}
+
 
     // Additional method to find all companies by project ID
-    public List<CompanyProject> findCompaniesByProjectId(long projectId) {
-        // List to store CompanyProject objects for a specific project.
-        List<CompanyProject> companyProjects = new ArrayList<>();
-        // Oppening the connection to the Database.
-        this.connection.openConnection();
-        // Select SQL sentence.
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_COMPANYPROJECT +
-                " WHERE project_id = ?";
+    public List<Company> findCompaniesByProjectId(long projectId) {
+    List<Company> companies = new ArrayList<>();
+    this.connection.openConnection();
+        
+    String sql = "SELECT " + ConstantsDataBase.COMPANY_COLUNA_ID + " FROM " + ConstantsDataBase.TABLE_COMPANYPROJECT +
+            " WHERE project_id = ?;";
 
-        try {
-            // Creating a PreparedStatement to execute the SQL sentence.
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
-            
-            // Setting the value of the PreparedStatement (the project's ID).
-            st.setLong(1, projectId); 
-            
-            // Executing the query and getting the result set.
-            ResultSet rs = st.executeQuery();
+    try {
+        PreparedStatement st = connection.getConnection().prepareStatement(sql);
+        
+        st.setLong(1, projectId);
 
-            // Looping through all results.
+        // 2. Usar try-with-resources para o ResultSet: garante que ele será fechado.
+        try (ResultSet rs = st.executeQuery()) {
+            
+            // 3. Iterar e processar DENTRO do escopo do ResultSet aberto
             while (rs.next()) {
-                // Instantiating a new CompanyProject object for each row.
-                CompanyProject companyProject = new CompanyProject();
+                long companyId = rs.getLong(ConstantsDataBase.COMPANY_COLUNA_ID); 
                 
-                // Note: These would need corresponding DAO methods to load Company and Project objects
-                // For now, creating empty objects - this should be improved with proper loading
-                Company company = new Company();
-                company.setId(rs.getLong("company_id"));
-                companyProject.setCompany(company);
                 
-                // Cannot instantiate abstract Project class directly
-                // This should be improved to load actual project via ProjectDAO
-                companyProject.setProject(null);
+                Company company = companyDAO.read(companyId);
                 
-                // Adding the companyProject object to the list.
-                companyProjects.add(companyProject);
+                if (company != null) {
+                    companies.add(company);
+                }
             }
+        } 
+        // Nota: O PreparedStatement 'st' é fechado automaticamente pelo try-with-resources.
 
-        }
-        // SQLException is an exception that is thrown when there is an error with the SQL code.
-        catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error reading companies by project ID: " + e.getMessage());        
-        }
+    } catch (SQLException e) { 
+        e.printStackTrace();
+        // Ajuste a mensagem para refletir a busca correta
+        System.out.println("Error listing companies by project ID: " + e.getMessage());        
+        // Relança a exceção como RuntimeException para o Spring gerenciar
 
-        // Closing the connection to the Database.
-        finally {
-            connection.closeConnection();
-        }
-
-        // Returns the list of company projects for the specific project (can be empty).
-        return companyProjects;
+    } finally {
+        // 4. FECHAR CONEXÃO: Fecha após todo o processamento
+        this.connection.closeConnection();
     }
+    
+    return companies;
+}
 }

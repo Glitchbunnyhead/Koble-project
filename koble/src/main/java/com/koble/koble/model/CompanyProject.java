@@ -3,33 +3,27 @@ package com.koble.koble.model;
 public class CompanyProject {
 
     //Declaring class attributes
-    private Company company;
-    private Project project;
+    private long companyId;
+    private long projectId;
 
     //Constructor of the class
     public CompanyProject(){}
 
-    public CompanyProject(Company company, Project project) {
-        this.company = company;
-        this.project = project;
+    public CompanyProject(long companyId, long projectId) {
+        this.companyId = companyId;
+        this.projectId = projectId;
     }
 
-    //Getters and Setters of the class
-    public Company getCompany() {
-        return company;
+    public long getCompanyId() {
+        return companyId;
+    }   
+    public void setCompanyId(long companyId) {
+        this.companyId = companyId;
     }
-
-    public void setCompany(Company company) {
-        this.company = company;
+    public long getProjectId() {
+        return projectId;
     }
-
-    public Project getProject() {
-        return project;
-    }
-
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;}
    
 }

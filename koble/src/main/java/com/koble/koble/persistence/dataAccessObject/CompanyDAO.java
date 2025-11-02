@@ -262,6 +262,27 @@ public class CompanyDAO implements Crudl<Company> {
         // Returns the list of companies (can be empty).
         return companies;
     }
+
+
+
+    public boolean exists(long companyId) {
+        boolean exists = false;
+        this.connection.openConnection();
+        String sql = "SELECT 1 FROM " + ConstantsDataBase.TABLE_COMPANY + " WHERE " + ConstantsDataBase.COMPANY_COLUNA_ID + " = ?";
+        
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
+            st.setLong(1, companyId);
+            try (ResultSet rs = st.executeQuery()) {
+                exists = rs.next(); // Retorna true se houver pelo menos uma linha
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking project existence:" + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            this.connection.closeConnection();
+        }
+        return exists;
+}
 }
 
 
