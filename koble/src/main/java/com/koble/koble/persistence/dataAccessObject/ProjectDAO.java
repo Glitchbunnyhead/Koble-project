@@ -254,4 +254,24 @@ public class ProjectDAO implements Crudl<Project> {
         
         return project;
     }
+
+
+public boolean exists(long projectId) {
+    boolean exists = false;
+    this.connection.openConnection();
+    String sql = "SELECT 1 FROM " + ConstantsDataBase.TABLE_PROJECT + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+    
+    try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
+        st.setLong(1, projectId);
+        try (ResultSet rs = st.executeQuery()) {
+            exists = rs.next(); // Retorna true se houver pelo menos uma linha
+        }
+    } catch (SQLException e) {
+        System.out.println("Error checking project existence:" + e.getMessage());
+        e.printStackTrace();
+    } finally {
+        this.connection.closeConnection();
+    }
+    return exists;
+}
 }
