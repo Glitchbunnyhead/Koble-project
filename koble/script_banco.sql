@@ -143,7 +143,7 @@ CREATE TABLE company_project (
 );
 
 CREATE TABLE research (
-    research_id BIGINT,
+    research_id BIGINT AUTO_INCREMENT,
     project_id BIGINT NOT NULL, 
     research_objective VARCHAR(300) NOT NULL,
     research_justification VARCHAR(600) NOT NULL,
