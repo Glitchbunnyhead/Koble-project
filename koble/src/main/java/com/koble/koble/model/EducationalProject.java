@@ -6,16 +6,18 @@ public class EducationalProject extends Project {
     private String justification;
     private String course;
 
-    public EducationalProject(){super();}
+    public EducationalProject() {
+        super();
+    }
 
     public EducationalProject(int slots, String justification, String course) {
         super();
-        this.setType("Educational");
+        setType("Educational");
         this.slots = slots;
         this.justification = justification;
         this.course = course;
     }
-    
+
     public int getSlots() {
         return slots;
     }

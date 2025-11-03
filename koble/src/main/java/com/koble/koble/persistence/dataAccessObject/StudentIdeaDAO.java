@@ -1,21 +1,21 @@
 package com.koble.koble.persistence.dataAccessObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.springframework.stereotype.Repository;
-
 import com.koble.koble.model.StudentIdea;
 import com.koble.koble.model.Idea;
 import com.koble.koble.model.Student;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.MySqlConnection;
+import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class StudentIdeaDAO {
+
     private final MySqlConnection connection;
     private final IdeaDAO ideaDAO;
     private final StudentDAO studentDAO;
@@ -26,173 +26,167 @@ public class StudentIdeaDAO {
         this.studentDAO = studentDAO;
     }
 
-    // Create relationship (junction table)
     public StudentIdea create(StudentIdea si) {
-        this.connection.openConnection();
-        String sql = "INSERT INTO " + ConstantsDataBase.TABLE_STUDENTIDEA + " (" +
-                     ConstantsDataBase.COLUMN_IDEAID + ", " +
-                     ConstantsDataBase.COLUMN_STUDENTID + ") VALUES (?, ?)";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+        if (si == null) throw new IllegalArgumentException("StudentIdea não pode ser null");
+
+        String sql = "INSERT INTO " + ConstantsDataBase.TABLE_STUDENTIDEA + " ("
+                + ConstantsDataBase.COLUMN_IDEAID + ", "
+                + ConstantsDataBase.COLUMN_STUDENTID + ") VALUES (?, ?)";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, si.getIdeaId());
             st.setLong(2, si.getStudentId());
             st.executeUpdate();
+            return si;
         } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Erro ao criar StudentIdea: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return si;
     }
 
-    // Delete by composite key
     public String delete(long ideaId, long studentId) {
-        this.connection.openConnection();
+        if (ideaId <= 0 || studentId <= 0) throw new IllegalArgumentException("IDs inválidos");
+
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ? AND " +
-                     ConstantsDataBase.COLUMN_STUDENTID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ? AND " +
+                ConstantsDataBase.COLUMN_STUDENTID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, ideaId);
             st.setLong(2, studentId);
-            st.executeUpdate();
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0 ? "Relacionamento Student-Idea deletado com sucesso" : "Relacionamento não encontrado";
         } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error deleting student-idea relationship: " + e.getMessage();
+            throw new RuntimeException("Erro ao deletar StudentIdea: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return "Student-idea relationship deleted successfully";
     }
 
-    // Delete all by idea id
     public String deleteAllByIdeaId(long ideaId) {
-        this.connection.openConnection();
+        if (ideaId <= 0) throw new IllegalArgumentException("ID de Idea inválido");
+
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, ideaId);
             st.executeUpdate();
+            return "Todos os registros Student-Idea para a ideia deletados com sucesso";
         } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error deleting student-idea by idea id: " + e.getMessage();
+            throw new RuntimeException("Erro ao deletar StudentIdea por ideia: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return "All student-idea records for idea deleted successfully";
     }
 
-    // Delete all by student id
     public String deleteAllByStudentId(long studentId) {
-        this.connection.openConnection();
+        if (studentId <= 0) throw new IllegalArgumentException("ID de Student inválido");
+
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_STUDENTID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_STUDENTID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, studentId);
             st.executeUpdate();
+            return "Todos os registros Student-Idea para o estudante deletados com sucesso";
         } catch (SQLException e) {
-            e.printStackTrace();
-            return "Error deleting student-idea by student id: " + e.getMessage();
+            throw new RuntimeException("Erro ao deletar StudentIdea por estudante: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return "All student-idea records for student deleted successfully";
     }
 
-    // Check existence
     public boolean exists(long ideaId, long studentId) {
-        boolean exists = false;
-        this.connection.openConnection();
+        if (ideaId <= 0 || studentId <= 0) return false;
+
         String sql = "SELECT COUNT(*) FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ? AND " +
-                     ConstantsDataBase.COLUMN_STUDENTID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ? AND " +
+                ConstantsDataBase.COLUMN_STUDENTID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, ideaId);
             st.setLong(2, studentId);
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                exists = rs.getInt(1) > 0;
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao verificar existência StudentIdea: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return exists;
     }
 
-    // List all relationships
     public List<StudentIdea> listAll() {
         List<StudentIdea> list = new ArrayList<>();
-        this.connection.openConnection();
         String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_STUDENTIDEA;
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
-            ResultSet rs = st.executeQuery();
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
                 StudentIdea si = new StudentIdea();
                 si.setIdeaId(rs.getLong(ConstantsDataBase.COLUMN_IDEAID));
                 si.setStudentId(rs.getLong(ConstantsDataBase.COLUMN_STUDENTID));
                 list.add(si);
             }
+            return list;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao listar StudentIdeas: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return list;
     }
 
-    // Find all ideas for a student
     public List<Idea> findIdeasByStudentId(long studentId) {
+        if (studentId <= 0) return new ArrayList<>();
         List<Idea> ideas = new ArrayList<>();
-        this.connection.openConnection();
         String sql = "SELECT " + ConstantsDataBase.COLUMN_IDEAID + " FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_STUDENTID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_STUDENTID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, studentId);
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    long ideaId = rs.getLong(ConstantsDataBase.COLUMN_IDEAID);
-                    Idea idea = ideaDAO.read(ideaId);
+                    Idea idea = ideaDAO.read(rs.getLong(ConstantsDataBase.COLUMN_IDEAID));
                     if (idea != null) ideas.add(idea);
                 }
             }
+            return ideas;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar ideias por estudante: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return ideas;
     }
 
-    // Find all students for an idea
     public List<Student> findStudentsByIdeaId(long ideaId) {
+        if (ideaId <= 0) return new ArrayList<>();
         List<Student> students = new ArrayList<>();
-        this.connection.openConnection();
         String sql = "SELECT " + ConstantsDataBase.COLUMN_STUDENTID + " FROM " + ConstantsDataBase.TABLE_STUDENTIDEA +
-                     " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ?";
-        try {
-            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+                " WHERE " + ConstantsDataBase.COLUMN_IDEAID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, ideaId);
             try (ResultSet rs = st.executeQuery()) {
                 while (rs.next()) {
-                    long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
-                    Student student = studentDAO.read(studentId);
+                    Student student = studentDAO.read(rs.getLong(ConstantsDataBase.COLUMN_STUDENTID));
                     if (student != null) students.add(student);
                 }
             }
+            return students;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao buscar estudantes por ideia: " + e.getMessage(), e);
         } finally {
             connection.closeConnection();
         }
-        return students;
     }
 }
-    

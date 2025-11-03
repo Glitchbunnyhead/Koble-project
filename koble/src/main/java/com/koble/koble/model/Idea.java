@@ -1,7 +1,7 @@
 package com.koble.koble.model;
+
 public class Idea {
 
-    //Declaring class attributes
     private long id;
     private String proposer;
     private String targetAudience;
@@ -15,11 +15,10 @@ public class Idea {
     private long teacherId;
     private long studentId;
 
-    //Constructor of the class
-    public Idea(){}
+    public Idea() {}
 
     public Idea(String proposer, String targetAudience, String justification, String title, String aim,
-            String subtitle, String area, String description, String type, long teacher, long student) {
+                String subtitle, String area, String description, String type, long teacherId, long studentId) {
         this.proposer = proposer;
         this.targetAudience = targetAudience;
         this.justification = justification;
@@ -29,11 +28,10 @@ public class Idea {
         this.area = area;
         this.description = description;
         this.type = type;
-        this.teacherId = teacher;
-        this.studentId = student;
+        this.teacherId = teacherId;
+        this.studentId = studentId;
     }
 
-    //Getters and Setters of the class
     public long getId() {
         return id;
     }
@@ -129,7 +127,4 @@ public class Idea {
     public void setStudentId(long studentId) {
         this.studentId = studentId;
     }
-
-    
-    
 }

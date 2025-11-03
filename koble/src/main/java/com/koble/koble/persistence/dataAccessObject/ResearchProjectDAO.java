@@ -3,12 +3,11 @@ package com.koble.koble.persistence.dataAccessObject;
 import com.koble.koble.model.ResearchProject;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.MySqlConnection;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.springframework.stereotype.Repository;
 
 @Repository
 public class ResearchProjectDAO {
@@ -19,10 +18,9 @@ public class ResearchProjectDAO {
         this.connection = connection;
     }
 
-    // --- C R E A T E ---
-    // Note: Lançar SQLException é crucial para que o @Transactional saiba que houve um erro.
-    public ResearchProject create(ResearchProject researchProject, long idProject) throws SQLException {
-        this.connection.openConnection(); 
+    public ResearchProject create(ResearchProject researchProject, long projectId) {
+        if (researchProject == null || projectId <= 0)
+            throw new IllegalArgumentException("ResearchProject inválido ou ID do projeto inválido");
 
         String sql = "INSERT INTO " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " ("
                 + ConstantsDataBase.PROJECT_COLUNA_ID + ", "
@@ -30,181 +28,137 @@ public class ResearchProjectDAO {
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION + ", "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE + ") VALUES (?, ?, ?, ?)";
 
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-
-            st.setLong(1, idProject);
+            st.setLong(1, projectId);
             st.setString(2, researchProject.getObjective());
             st.setString(3, researchProject.getJustification());
-            st.setString(4, researchProject.getDiscipline()); 
+            st.setString(4, researchProject.getDiscipline());
 
             st.executeUpdate();
-
-            System.out.println("Research Project created successfully");
-            researchProject.setId(idProject);
+            researchProject.setId(projectId);
             return researchProject;
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error creating Research Project: " + e.getMessage());
-            throw e; 
-        } 
-        finally { connection.closeConnection(); }
+            throw new RuntimeException("Erro ao criar ResearchProject: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
     }
 
-    // --- D E L E T E ---
-    public String delete(long id) {
-        this.connection.openConnection();
-        String sql = "DELETE FROM " + ConstantsDataBase.TABLE_RESEARCHPROJECT +
-                     " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+    public String delete(long projectId) {
+        if (projectId <= 0) throw new IllegalArgumentException("ID do projeto inválido");
 
+        String sql = "DELETE FROM " + ConstantsDataBase.TABLE_RESEARCHPROJECT
+                + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-            st.setLong(1, id);
+            st.setLong(1, projectId);
             int rowsAffected = st.executeUpdate();
-            
-            if (rowsAffected > 0) {
-                return "Research Project deleted successfully";
-            } else {
-                return "Research Project not found or already deleted.";
-            }
+            return rowsAffected > 0 ? "Research Project deletado com sucesso"
+                                    : "Research Project não encontrado ou já deletado";
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            // Lança RuntimeException para Rollback
-            throw new RuntimeException("Error deleting Research Project: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao deletar ResearchProject: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
         }
-        finally { connection.closeConnection(); }
     }
 
-    // --- U P D A T E ---
-    public ResearchProject update(long id, ResearchProject researchProject) {
-        if (id <= 0) {
-            System.out.println("Error updating Research Project: Project ID is missing or invalid.");
-            return null;
-        }
-
-        this.connection.openConnection();
+    // --- UPDATE ---
+    public ResearchProject update(long projectId, ResearchProject researchProject) {
+        if (projectId <= 0 || researchProject == null)
+            throw new IllegalArgumentException("ResearchProject inválido ou ID do projeto inválido");
 
         String sql = "UPDATE " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " SET "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION + " = ?, "
                 + ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE + " = ? "
-                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
+                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
 
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-
-            // CORRIGIDO: Usando os getters corretos da Model
             st.setString(1, researchProject.getObjective());
             st.setString(2, researchProject.getJustification());
-            st.setString(3, researchProject.getDiscipline()); 
-            st.setLong(4, id);
-
+            st.setString(3, researchProject.getDiscipline());
+            st.setLong(4, projectId);
 
             int rowsAffected = st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Research Project updated successfully with ID: " + id);
-                return researchProject;
-            } else {
-                System.out.println("Research Project with Project ID " + id + " not found for update.");
-                return null;
-            }
+            return rowsAffected > 0 ? researchProject : null;
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            // Lança RuntimeException para Rollback
-            throw new RuntimeException("Error updating Research Project: " + e.getMessage(), e);
-        } 
-        finally { connection.closeConnection(); }
-    }
-
-    // --- R E A D ---
-    public ResearchProject read(long id) {
-        ResearchProject researchProject  = null;
-        this.connection.openConnection();
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p INNER JOIN " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " r ON p.project_id = r.project_id WHERE p." + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
-
-
-        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-            st.setLong(1, id);
-            try (ResultSet rs = st.executeQuery()) {
-
-                if (rs.next()) {
-                    researchProject = new ResearchProject();
-                    researchProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
-                    researchProject.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
-                    researchProject.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
-                    researchProject.setDuration(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DURATION));
-                    researchProject.setImage(rs.getString(ConstantsDataBase.PROJECT_COLUNA_IMAGE));
-                    researchProject.setComplementHours(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS));
-                    researchProject.setScholarshipAvailable(rs.getBoolean(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE));
-                    researchProject.setScholarshipType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE));
-                    researchProject.setSalary(rs.getDouble(ConstantsDataBase.PROJECT_COLUNA_SALARY));
-                    researchProject.setRequirements(rs.getString(ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS));
-                    researchProject.setScholarshipQuantity(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY));
-                    researchProject.setTitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TITLE));
-                    researchProject.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
-                    researchProject.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
-                    researchProject.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
-                    researchProject.setType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE));                  
-
-                    researchProject.setObjective(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
-                    researchProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION));
-                    researchProject.setDiscipline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Lança RuntimeException
-            throw new RuntimeException("Error reading Research Project: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao atualizar ResearchProject: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
         }
-        finally { connection.closeConnection(); }
-
-        return researchProject;
     }
 
-    // --- L I S T ---
+    public ResearchProject read(long projectId) {
+        if (projectId <= 0) return null;
+
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p "
+                + "INNER JOIN " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " r "
+                + "ON p." + ConstantsDataBase.PROJECT_COLUNA_ID + " = r." + ConstantsDataBase.PROJECT_COLUNA_ID
+                + " WHERE p." + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
+            st.setLong(1, projectId);
+            try (ResultSet rs = st.executeQuery()) {
+                return rs.next() ? mapResultSetToResearchProject(rs) : null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao ler ResearchProject: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
+    }
+
     public List<ResearchProject> listAll() {
         List<ResearchProject> researchProjects = new ArrayList<>();
-        this.connection.openConnection();
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p INNER JOIN " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " r ON p.project_id = r.project_id ;";
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " p "
+                + "INNER JOIN " + ConstantsDataBase.TABLE_RESEARCHPROJECT + " r "
+                + "ON p." + ConstantsDataBase.PROJECT_COLUNA_ID + " = r." + ConstantsDataBase.PROJECT_COLUNA_ID;
 
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql);
              ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
-                ResearchProject researchProject = new ResearchProject();
-                researchProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
-                researchProject.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
-                researchProject.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
-                researchProject.setDuration(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DURATION));
-                researchProject.setImage(rs.getString(ConstantsDataBase.PROJECT_COLUNA_IMAGE));
-                researchProject.setComplementHours(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS));
-                researchProject.setScholarshipAvailable(rs.getBoolean(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE));
-                researchProject.setScholarshipType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE));
-                researchProject.setSalary(rs.getDouble(ConstantsDataBase.PROJECT_COLUNA_SALARY));
-                researchProject.setRequirements(rs.getString(ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS));
-                researchProject.setScholarshipQuantity(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY));
-                researchProject.setTitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TITLE));
-                researchProject.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
-                researchProject.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
-                researchProject.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
-                researchProject.setType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE));  
-                researchProject.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID)); 
-                researchProject.setObjective(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
-                researchProject.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION));
-                researchProject.setDiscipline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
-
-                researchProjects.add(researchProject);
+                researchProjects.add(mapResultSetToResearchProject(rs));
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            // Lança RuntimeException
-            throw new RuntimeException("Error listing Research Projects: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao listar ResearchProjects: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
         }
-         finally { connection.closeConnection(); }
-
         return researchProjects;
+    }
+
+    private ResearchProject mapResultSetToResearchProject(ResultSet rs) throws SQLException {
+        ResearchProject rp = new ResearchProject();
+        rp.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
+        rp.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
+        rp.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
+        rp.setDuration(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DURATION));
+        rp.setImage(rs.getString(ConstantsDataBase.PROJECT_COLUNA_IMAGE));
+        rp.setComplementHours(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS));
+        rp.setScholarshipAvailable(rs.getBoolean(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE));
+        rp.setScholarshipType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE));
+        rp.setSalary(rs.getDouble(ConstantsDataBase.PROJECT_COLUNA_SALARY));
+        rp.setRequirements(rs.getString(ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS));
+        rp.setScholarshipQuantity(rs.getInt(ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY));
+        rp.setTitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TITLE));
+        rp.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
+        rp.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
+        rp.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
+        rp.setType(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE));
+
+        rp.setObjective(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_OBJECTIVE));
+        rp.setJustification(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_JUSTIFICATION));
+        rp.setDiscipline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_RESEARCH_DISCIPLINE));
+
+        return rp;
     }
 }

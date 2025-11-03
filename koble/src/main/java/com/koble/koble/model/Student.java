@@ -1,10 +1,10 @@
 package com.koble.koble.model;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Student {
 
-    //Declaring class attributes
     private long id;
     private String registration;
     private String name;
@@ -13,8 +13,7 @@ public class Student {
     private String phoneNumber;
     private Date birthDate;
 
-    //Constructor of the class
-    public Student(){}
+    public Student() {}
 
     public Student(String email, String name, String password, String phoneNumber, String registration, Date birthDate) {
         this.email = email;
@@ -24,8 +23,6 @@ public class Student {
         this.registration = registration;
         this.birthDate = birthDate;
     }
-
-    //Getters and Setters of the class
 
     public long getId() {
         return id;
@@ -75,7 +72,7 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-      public Date getBirthDate() {
+    public Date getBirthDate() {
         return birthDate;
     }
 
@@ -83,4 +80,17 @@ public class Student {
         this.birthDate = birthDate;
     }
 
+
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", registration='" + registration + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", birthDate=" + birthDate +
+                '}';
+    }
 }

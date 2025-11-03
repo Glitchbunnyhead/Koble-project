@@ -2,7 +2,6 @@ package com.koble.koble.model;
 
 public class Company {
     
-    //Declaring class attributes
     private long id;
     private String cnpj;
     private String name;
@@ -10,8 +9,7 @@ public class Company {
     private String password;
     private String phoneNumber;
 
-    //Constructor of the class
-    public Company(){}
+    public Company() {}
 
     public Company(String cnpj, String email, String name, String password, String phoneNumber) {
         this.cnpj = cnpj;
@@ -20,8 +18,6 @@ public class Company {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
-
-    //Getters and Setters of the class
 
     public long getId() {
         return id;
@@ -70,5 +66,4 @@ public class Company {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 }

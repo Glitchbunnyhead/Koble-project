@@ -4,28 +4,25 @@ import com.koble.koble.model.*;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.Crudl;
 import com.koble.koble.persistence.MySqlConnection;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
-
 @Repository
 public class ProjectDAO implements Crudl<Project> {
-    
-    // A conexão ainda é injetada
+
     private final MySqlConnection connection;
 
     public ProjectDAO(MySqlConnection connection) {
         this.connection = connection;
     }
 
-    // --- C R E A T E ---
     @Override
     public Project create(Project project) {
-        this.connection.openConnection(); 
-        
+        if (project == null) throw new IllegalArgumentException("Project inválido");
+
         String sql = "INSERT INTO " + ConstantsDataBase.TABLE_PROJECT + " ("
                 + ConstantsDataBase.PROJECT_COLUNA_TIMELINE + ", "
                 + ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + ", "
@@ -43,98 +40,84 @@ public class ProjectDAO implements Crudl<Project> {
                 + ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION + ", "
                 + ConstantsDataBase.PROJECT_COLUNA_TYPE + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-        // Usando try-with-resources para garantir o fechamento de PreparedStatement/ResultSet
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            
             st.setString(1, project.getTimeline());
-            st.setString(2, project.getExternalLink()); // Usando getLinkExtension() conforme a model
+            st.setString(2, project.getExternalLink());
             st.setString(3, project.getDuration());
             st.setString(4, project.getImage());
             st.setString(5, project.getComplementHours());
-            st.setBoolean(6, project.isScholarshipAvailable()); // Usando isScholarship() conforme a model
+            st.setBoolean(6, project.isScholarshipAvailable());
             st.setString(7, project.getScholarshipType());
             st.setDouble(8, project.getSalary());
             st.setString(9, project.getRequirements());
             st.setInt(10, project.getScholarshipQuantity());
             st.setString(11, project.getTitle());
             st.setString(12, project.getSubtitle());
-            st.setString(13, project.getCoordinator()); // Usando getCoordenator() conforme a model
+            st.setString(13, project.getCoordinator());
             st.setString(14, project.getDescription());
             st.setString(15, project.getType());
 
-            int affectedRows = st.executeUpdate();
+            st.executeUpdate();
 
-            try (ResultSet generatedKeys = st.getGeneratedKeys()) { 
-            // ... (sua lógica para obter o ID gerado)
-            if (generatedKeys.next()) {
-                long generatedId = generatedKeys.getLong(1);
-                project.setId(generatedId);
-            } else {
-                throw new SQLException("Creating project failed, no ID obtained.");
+            try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    project.setId(generatedKeys.getLong(1));
+                } else {
+                    throw new SQLException("Creating project failed, no ID obtained.");
+                }
             }
 
-            System.out.println("Project created successfully with ID: " + project.getId());
             return project;
-        }
         } catch (SQLException e) {
-            System.out.println("Error creating project: " + e.getMessage()); // Mensagem de erro do banco
-            e.printStackTrace(); // Stack trace completo
-            throw new RuntimeException("Database error during project creation.", e);
-        } 
-         finally { connection.closeConnection(); }
-    
+            throw new RuntimeException("Erro ao criar Project: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
     }
 
-
-    // --- D E L E T E ---
     @Override
     public String delete(long id) {
-        this.connection.openConnection();
-        String sql = "DELETE FROM " + ConstantsDataBase.TABLE_PROJECT + 
-                     " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+        if (id <= 0) throw new IllegalArgumentException("ID inválido para deletar Project");
 
+        String sql = "DELETE FROM " + ConstantsDataBase.TABLE_PROJECT + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
             st.setLong(1, id);
-            st.executeUpdate();
-            return "Project deleted successfully";
+            int rowsAffected = st.executeUpdate();
+            return rowsAffected > 0 ? "Project deleted successfully" : "Nenhum Project encontrado com ID: " + id;
         } catch (SQLException e) {
-            e.printStackTrace();
-            // Lançamos a exceção aqui também para que a transação possa ser revertida
-            throw new RuntimeException("Database error during project deletion.", e);
-        } 
-        finally { connection.closeConnection(); }
+            throw new RuntimeException("Erro ao deletar Project: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
     }
 
-    // --- U P D A T E ---
     @Override
     public Project update(long id, Project project) {
-        if (id <= 0) {
-            System.out.println("Error updating project: Project ID is missing or invalid.");
-            return null;
-        }
-        
-        this.connection.openConnection();
-        
-        String sql = "UPDATE " + ConstantsDataBase.TABLE_PROJECT + " SET " 
-            + ConstantsDataBase.PROJECT_COLUNA_TIMELINE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_DURATION + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_IMAGE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_SALARY + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_TITLE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_SUBTITLE + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_COORDINATOR + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION + " = ?, "
-            + ConstantsDataBase.PROJECT_COLUNA_TYPE + " = ? " 
-            + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;"; 
+        if (id <= 0 || project == null) throw new IllegalArgumentException("Project inválido ou ID inválido");
 
+        String sql = "UPDATE " + ConstantsDataBase.TABLE_PROJECT + " SET "
+                + ConstantsDataBase.PROJECT_COLUNA_TIMELINE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_DURATION + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_IMAGE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_COMPLEMENTARY_HOURS + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_AVAILABLE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_TYPE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_SALARY + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_REQUIREMENTS + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_SCHOLARSHIP_QUANTITY + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_TITLE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_SUBTITLE + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_COORDINATOR + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION + " = ?, "
+                + ConstantsDataBase.PROJECT_COLUNA_TYPE + " = ? "
+                + "WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
+
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-
             st.setString(1, project.getTimeline());
             st.setString(2, project.getExternalLink());
             st.setString(3, project.getDuration());
@@ -153,88 +136,73 @@ public class ProjectDAO implements Crudl<Project> {
             st.setLong(16, id);
 
             int rowsAffected = st.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("Project updated successfully with ID: " + id);
-                return project;
-            } else {
-                System.out.println("Project with ID " + id + " not found for update.");
-                return null;
-            }
-
+            return rowsAffected > 0 ? project : null;
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database error during project update.", e);
+            throw new RuntimeException("Erro ao atualizar Project: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
         }
-         finally { connection.closeConnection(); }
     }
 
-    // --- R E A D ---
     @Override
     public Project read(long id) {
-        Project project = null;
-        this.connection.openConnection();
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + 
-                     " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?;";
+        if (id <= 0) return null;
 
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+
+        Project project = null;
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-        
             st.setLong(1, id);
-            try(ResultSet rs = st.executeQuery()) {
+            try (ResultSet rs = st.executeQuery()) {
                 if (rs.next()) {
-                    project = createProjectFromResultSet(rs);
+                    project = mapResultSetToProject(rs);
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database error during project reading.", e);
-        } 
-        finally { connection.closeConnection(); }
-
+            throw new RuntimeException("Erro ao ler Project: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
         return project;
     }
 
-    // --- L I S T ALL ---
     @Override
     public List<Project> listAll() {
         List<Project> projects = new ArrayList<>();
-        this.connection.openConnection();
-        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT + ";";
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_PROJECT;
 
+        connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql);
-             ResultSet rs = st.executeQuery()) { // Usando try-with-resources para RS também
-
+             ResultSet rs = st.executeQuery()) {
             while (rs.next()) {
-                Project project = createProjectFromResultSet(rs);
-                projects.add(project);
+                projects.add(mapResultSetToProject(rs));
             }
-
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Database error during project listing.", e);
-        } 
-        finally {  connection.closeConnection(); }
-
+            throw new RuntimeException("Erro ao listar Projects: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
+        }
         return projects;
     }
 
-
-    // --- H E L P E R ---
-    private Project createProjectFromResultSet(ResultSet rs) throws SQLException {
-        // (Lógica de polimorfismo na leitura mantida da sua correção anterior)
-        String projectType = rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE);
+    private Project mapResultSetToProject(ResultSet rs) throws SQLException {
+        String type = rs.getString(ConstantsDataBase.PROJECT_COLUNA_TYPE);
         Project project;
-        
-        if ("Research".equalsIgnoreCase(projectType)) {
-            project = new ResearchProject();
-        } else if ("Educational".equalsIgnoreCase(projectType)) {
-            project = new EducationalProject();
-        } else if ("Extension".equalsIgnoreCase(projectType)) {
-            project = new ExtensionProject();
-        } else {
-            throw new SQLException("Tipo de projeto desconhecido no banco de dados: " + projectType);
+        switch (type.toLowerCase()) {
+            case "research":
+                project = new ResearchProject();
+                break;
+            case "educational":
+                project = new EducationalProject();
+                break;
+            case "extension":
+                project = new ExtensionProject();
+                break;
+            default:
+                throw new SQLException("Tipo de projeto desconhecido: " + type);
         }
-        
+
         project.setId(rs.getLong(ConstantsDataBase.PROJECT_COLUNA_ID));
         project.setTimeline(rs.getString(ConstantsDataBase.PROJECT_COLUNA_TIMELINE));
         project.setExternalLink(rs.getString(ConstantsDataBase.PROJECT_COLUNA_EXTERNAL_LINK));
@@ -250,28 +218,28 @@ public class ProjectDAO implements Crudl<Project> {
         project.setSubtitle(rs.getString(ConstantsDataBase.PROJECT_COLUNA_SUBTITLE));
         project.setCoordinator(rs.getString(ConstantsDataBase.PROJECT_COLUNA_COORDINATOR));
         project.setDescription(rs.getString(ConstantsDataBase.PROJECT_COLUNA_DESCRIPTION));
-        project.setType(projectType);
-        
+        project.setType(type);
+
         return project;
     }
 
+    public boolean exists(long projectId) {
+        if (projectId <= 0) return false;
 
-public boolean exists(long projectId) {
-    boolean exists = false;
-    this.connection.openConnection();
-    String sql = "SELECT 1 FROM " + ConstantsDataBase.TABLE_PROJECT + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
-    
-    try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
-        st.setLong(1, projectId);
-        try (ResultSet rs = st.executeQuery()) {
-            exists = rs.next(); // Retorna true se houver pelo menos uma linha
+        String sql = "SELECT 1 FROM " + ConstantsDataBase.TABLE_PROJECT + " WHERE " + ConstantsDataBase.PROJECT_COLUNA_ID + " = ?";
+        boolean exists = false;
+
+        connection.openConnection();
+        try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
+            st.setLong(1, projectId);
+            try (ResultSet rs = st.executeQuery()) {
+                exists = rs.next();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao verificar existência de Project: " + e.getMessage(), e);
+        } finally {
+            connection.closeConnection();
         }
-    } catch (SQLException e) {
-        System.out.println("Error checking project existence:" + e.getMessage());
-        e.printStackTrace();
-    } finally {
-        this.connection.closeConnection();
+        return exists;
     }
-    return exists;
-}
 }

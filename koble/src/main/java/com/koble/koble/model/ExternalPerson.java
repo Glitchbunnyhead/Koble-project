@@ -2,15 +2,13 @@ package com.koble.koble.model;
 
 public class ExternalPerson {
 
-    //Declaring class attributes
     private long id;
     private String name;
     private String email;
     private String password;
-    private  String phoneNumber;
+    private String phoneNumber;
 
-    //Constructor of the class
-    public ExternalPerson(){}
+    public ExternalPerson() {}
 
     public ExternalPerson(String email, String name, String password, String phoneNumber) {
         this.email = email;
@@ -19,7 +17,14 @@ public class ExternalPerson {
         this.phoneNumber = phoneNumber;
     }
 
-    //Getters and Setters of the class
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -50,13 +55,5 @@ public class ExternalPerson {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public long getId(){
-        return id;
-    }
-
-    public void setId(long id){
-        this.id = id;
     }
 }

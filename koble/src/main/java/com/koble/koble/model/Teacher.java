@@ -1,7 +1,9 @@
 package com.koble.koble.model;
+
+import java.util.Objects;
+
 public class Teacher {
 
-    //Declaring class attributes
     private long id;
     private String siape;
     private String email;
@@ -9,20 +11,15 @@ public class Teacher {
     private String password;
     private String phoneNumber;
 
-    //Constructor of the class
-    public Teacher(){
+    public Teacher() {}
 
-    }
-
-    public Teacher( String siape, String email, String name, String password, String phoneNumber) {
+    public Teacher(String siape, String email, String name, String password, String phoneNumber) {
         this.siape = siape;
         this.email = email;
         this.name = name;
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
-
-    //Getters and Setters of the class
 
     public long getId() {
         return id;
@@ -72,10 +69,14 @@ public class Teacher {
         this.phoneNumber = phoneNumber;
     }
 
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Teacher{" +
+                "id=" + id +
+                ", siape='" + siape + '\'' +
+                ", email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
+    }
 }

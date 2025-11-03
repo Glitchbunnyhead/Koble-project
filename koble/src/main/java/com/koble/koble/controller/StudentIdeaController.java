@@ -36,88 +36,73 @@ public class StudentIdeaController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentIdea> create(@RequestBody StudentIdea si) {
-        // validate student exists
-        if (studentDAO.read(si.getStudentId()) == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        // validate idea exists
-        if (ideaDAO.read(si.getIdeaId()) == null) {
+    public ResponseEntity<StudentIdea> create(@RequestBody StudentIdea studentIdea) {
+        boolean studentExists = studentDAO.read(studentIdea.getStudentId()) != null;
+        boolean ideaExists = ideaDAO.read(studentIdea.getIdeaId()) != null;
+
+        if (!studentExists || !ideaExists) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
-        StudentIdea created = studentIdeaDAO.create(si);
-        if (created == null) {
+        StudentIdea createdStudentIdea = studentIdeaDAO.create(studentIdea);
+        if (createdStudentIdea == null) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(createdStudentIdea, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<StudentIdea>> listAll() {
-        List<StudentIdea> list = studentIdeaDAO.listAll();
-        return ResponseEntity.ok(list);
+        List<StudentIdea> studentIdeas = studentIdeaDAO.listAll();
+        return ResponseEntity.ok(studentIdeas);
     }
 
     @GetMapping("/ideas/{studentId}")
     public ResponseEntity<List<Idea>> findIdeasByStudentId(@PathVariable Long studentId) {
         List<Idea> ideas = studentIdeaDAO.findIdeasByStudentId(studentId);
-        if (ideas.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(ideas);
+        return ideas.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(ideas);
     }
 
     @GetMapping("/students/{ideaId}")
     public ResponseEntity<List<Student>> findStudentsByIdeaId(@PathVariable Long ideaId) {
         List<Student> students = studentIdeaDAO.findStudentsByIdeaId(ideaId);
-        if (students.isEmpty()) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(students);
+        return students.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(students);
     }
 
-    // Delete relationship by studentId and ideaId (path order: studentId then ideaId)
     @DeleteMapping("/{studentId}/{ideaId}")
     public ResponseEntity<String> delete(@PathVariable long studentId, @PathVariable long ideaId) {
-        // check existence (dao expects ideaId, studentId)
         if (!studentIdeaDAO.exists(ideaId, studentId)) {
             return new ResponseEntity<>("Student-idea relationship not found", HttpStatus.NOT_FOUND);
         }
 
         String status = studentIdeaDAO.delete(ideaId, studentId);
-        String lower = status.toLowerCase();
-        if (lower.contains("success") || lower.contains("deleted")) {
-            return ResponseEntity.ok(status);
-        } else if (lower.contains("not found")) {
-            return new ResponseEntity<>(status, HttpStatus.NOT_FOUND);
-        } else if (lower.contains("error")) {
-            return new ResponseEntity<>(status, HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            return ResponseEntity.ok(status);
-        }
+        return buildResponse(status);
     }
 
     @DeleteMapping("/student/{studentId}")
     public ResponseEntity<String> deleteAllByStudentId(@PathVariable long studentId) {
         String status = studentIdeaDAO.deleteAllByStudentId(studentId);
-        String lower = status.toLowerCase();
-        if (lower.contains("success") || lower.contains("deleted")) {
-            return ResponseEntity.ok(status);
-        } else if (lower.contains("error")) {
-            return new ResponseEntity<>(status, HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            return ResponseEntity.ok(status);
-        }
+        return buildResponse(status);
     }
 
     @DeleteMapping("/idea/{ideaId}")
     public ResponseEntity<String> deleteAllByIdeaId(@PathVariable long ideaId) {
         String status = studentIdeaDAO.deleteAllByIdeaId(ideaId);
-        String lower = status.toLowerCase();
-        if (lower.contains("success") || lower.contains("deleted")) {
+        return buildResponse(status);
+    }
+
+    private ResponseEntity<String> buildResponse(String status) {
+        String result = status.toLowerCase();
+
+        if (result.contains("success") || result.contains("deleted")) {
             return ResponseEntity.ok(status);
-        } else if (lower.contains("error")) {
+        } else if (result.contains("not found")) {
+            return new ResponseEntity<>(status, HttpStatus.NOT_FOUND);
+        } else if (result.contains("error")) {
             return new ResponseEntity<>(status, HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            return ResponseEntity.ok(status);
         }
+
+        return ResponseEntity.ok(status);
     }
 }
-    

@@ -1,15 +1,16 @@
 package com.koble.koble.model;
 
+import java.util.Objects;
 
 public abstract class Project {
 
     private long id;
     private String title;
     private String subtitle;
-    private String coordinator; // Nome do professor que é coordinator
+    private String coordinator;
     private String description;
     private String timeline;
-    private String externalLink; 
+    private String externalLink;
     private String duration;
     private String image;
     private String complementHours;
@@ -21,23 +22,23 @@ public abstract class Project {
     private String type;
     private String typeId;
 
+    public Project() {}
 
-    public Project() {
-    }
-
-    public Project(String complementHours, String coordinator, String description, 
-            String duration, double salary, String image, String externalLink, String requirements, 
-            boolean scholarship, String subtitle, String timeline, String title, String type, 
-            String typeId, String scholarshipType, int scholarshipQuantity) {
+    public Project(
+            String complementHours, String coordinator, String description, String duration, 
+            double salary, String image, String externalLink, String requirements, 
+            boolean scholarshipAvailable, String subtitle, String timeline, String title, 
+            String type, String typeId, String scholarshipType, int scholarshipQuantity
+    ) {
         this.complementHours = complementHours;
         this.coordinator = coordinator;
         this.description = description;
         this.duration = duration;
         this.salary = salary;
         this.image = image;
-        this.externalLink = externalLink; 
+        this.externalLink = externalLink;
         this.requirements = requirements;
-        this.scholarshipAvailable = scholarship;
+        this.scholarshipAvailable = scholarshipAvailable;
         this.subtitle = subtitle;
         this.timeline = timeline;
         this.title = title;
@@ -45,15 +46,6 @@ public abstract class Project {
         this.typeId = typeId;
         this.scholarshipType = scholarshipType;
         this.scholarshipQuantity = scholarshipQuantity;
-    }
-
- 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Project project = (Project) o;
-        return id == project.id;
     }
 
     public long getId() {
@@ -76,8 +68,8 @@ public abstract class Project {
         return externalLink;
     }
 
-    public void setExternalLink(String linkExtension) {
-        this.externalLink = linkExtension;
+    public void setExternalLink(String externalLink) {
+        this.externalLink = externalLink;
     }
 
     public String getDuration() {
@@ -104,7 +96,6 @@ public abstract class Project {
         this.complementHours = complementHours;
     }
 
-   
     public boolean isScholarshipAvailable() {
         return scholarshipAvailable;
     }
@@ -193,33 +184,26 @@ public abstract class Project {
         this.typeId = typeId;
     }
 
-
-    @Override
-    public int hashCode() {
-        return Long.hashCode(id);
-    }
-
-
     @Override
     public String toString() {
         return "Project{" +
                 "id=" + id +
+                ", title='" + title + '\'' +
+                ", subtitle='" + subtitle + '\'' +
+                ", coordinator='" + coordinator + '\'' +
+                ", description='" + description + '\'' +
                 ", timeline='" + timeline + '\'' +
                 ", externalLink='" + externalLink + '\'' +
                 ", duration='" + duration + '\'' +
                 ", image='" + image + '\'' +
                 ", complementHours='" + complementHours + '\'' +
-                ", scholarshipAvailble=" + scholarshipAvailable +
+                ", scholarshipAvailable=" + scholarshipAvailable +
+                ", scholarshipType='" + scholarshipType + '\'' +
                 ", salary=" + salary +
                 ", requirements='" + requirements + '\'' +
-                ", title='" + title + '\'' +
-                ", subtitle='" + subtitle + '\'' +
-                ", description='" + description + '\'' +
-                ", coordinator='" + coordinator + '\'' +
+                ", scholarshipQuantity=" + scholarshipQuantity +
                 ", type='" + type + '\'' +
                 ", typeId='" + typeId + '\'' +
                 '}';
     }
-
-   
 }

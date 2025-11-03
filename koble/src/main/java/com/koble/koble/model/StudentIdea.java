@@ -1,16 +1,17 @@
 package com.koble.koble.model;
+
+import java.util.Objects;
+
 public class StudentIdea {
 
-    //Declaring class attributes
     private long ideaId;
     private long studentId;
 
-    //Constructor of the class
-    public StudentIdea(){}
+    public StudentIdea() {}
 
-    public StudentIdea(long idea, long student) {
-        this.ideaId = idea;
-        this.studentId = student;
+    public StudentIdea(long ideaId, long studentId) {
+        this.ideaId = ideaId;
+        this.studentId = studentId;
     }
 
     public long getIdeaId() {
@@ -29,6 +30,13 @@ public class StudentIdea {
         this.studentId = studentId;
     }
 
-    
 
+
+    @Override
+    public String toString() {
+        return "StudentIdea{" +
+                "ideaId=" + ideaId +
+                ", studentId=" + studentId +
+                '}';
+    }
 }
