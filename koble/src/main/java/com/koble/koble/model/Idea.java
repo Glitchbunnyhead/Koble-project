@@ -8,7 +8,7 @@ public class Idea {
     private String justification;
     private String title;
     private String aim;
-    private  String subtitle;
+    private String subtitle;
     private String area;
     private String description;
     private String type;

@@ -14,20 +14,24 @@ import org.springframework.stereotype.Repository;
 
 //Importing the Idea model, Crudl interface and MySqlConnection class.
 import com.koble.koble.model.Idea;
-import com.koble.koble.model.Teacher;
 import com.koble.koble.model.Student;
+import com.koble.koble.model.Teacher;
 import com.koble.koble.persistence.ConstantsDataBase;
 import com.koble.koble.persistence.Crudl;
 import com.koble.koble.persistence.MySqlConnection;
 
 @Repository
 public class IdeaDAO implements Crudl<Idea> {
-    //Creating a MySqlConnection attributes.
+    //Creating a MySqlConnection attributes and DAOs for related entities.
     private final MySqlConnection connection;
+    private final StudentDAO studentDAO;
+    private final TeacherDAO teacherDAO;
 
-    //Class constructor.
-    public IdeaDAO(MySqlConnection connection){
+    //Class constructor with dependency injection for related DAOs.
+    public IdeaDAO(MySqlConnection connection, StudentDAO studentDAO, TeacherDAO teacherDAO){
         this.connection = connection;
+        this.studentDAO = studentDAO;
+        this.teacherDAO = teacherDAO;
     }
 
     @Override
@@ -63,16 +67,16 @@ public class IdeaDAO implements Crudl<Idea> {
             st.setString(7, idea.getArea());
             st.setString(8, idea.getDescription());
             st.setString(9, idea.getType());
-            
-            // Handle nullable Teacher and Student objects
-            if (idea.getTeacher() != null) {
-                st.setLong(10, idea.getTeacher().getId());
+
+            // Teacher and Student are now stored as IDs in the Idea model
+            if (idea.getTeacherId() > 0) {
+                st.setLong(10, idea.getTeacherId());
             } else {
                 st.setNull(10, java.sql.Types.BIGINT);
             }
-            
-            if (idea.getStudent() != null) {
-                st.setLong(11, idea.getStudent().getId());
+
+            if (idea.getStudentId() > 0) {
+                st.setLong(11, idea.getStudentId());
             } else {
                 st.setNull(11, java.sql.Types.BIGINT);
             }
@@ -171,15 +175,15 @@ public class IdeaDAO implements Crudl<Idea> {
                 st.setString(8, idea.getDescription());
                 st.setString(9, idea.getType());
                 
-                // Handle nullable Teacher and Student objects
-                if (idea.getTeacher() != null) {
-                    st.setLong(10, idea.getTeacher().getId());
+                // Teacher and Student are now stored as IDs in the Idea model
+                if (idea.getTeacherId() > 0) {
+                    st.setLong(10, idea.getTeacherId());
                 } else {
                     st.setNull(10, java.sql.Types.BIGINT);
                 }
-                
-                if (idea.getStudent() != null) {
-                    st.setLong(11, idea.getStudent().getId());
+
+                if (idea.getStudentId() > 0) {
+                    st.setLong(11, idea.getStudentId());
                 } else {
                     st.setNull(11, java.sql.Types.BIGINT);
                 }
@@ -248,18 +252,14 @@ public class IdeaDAO implements Crudl<Idea> {
                 
                 // Note: These would need corresponding DAO methods to load Teacher and Student objects
                 // For now, creating empty objects if IDs are present - this should be improved with proper loading
-                Long teacherId = rs.getLong(ConstantsDataBase.COLUMN_TEACHERID);
+                long teacherId = rs.getLong(ConstantsDataBase.COLUMN_TEACHERID);
                 if (!rs.wasNull()) {
-                    Teacher teacher = new Teacher();
-                    teacher.setId(teacherId);
-                    idea.setTeacher(teacher);
+                    idea.setTeacherId(teacherId);
                 }
-                
-                Long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
+
+                long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
                 if (!rs.wasNull()) {
-                    Student student = new Student();
-                    student.setId(studentId);
-                    idea.setStudent(student);
+                    idea.setStudentId(studentId);
                 }
             }
 
@@ -315,18 +315,14 @@ public class IdeaDAO implements Crudl<Idea> {
                 
                 // Note: These would need corresponding DAO methods to load Teacher and Student objects
                 // For now, creating empty objects if IDs are present - this should be improved with proper loading
-                Long teacherId = rs.getLong(ConstantsDataBase.COLUMN_TEACHERID);
+                long teacherId = rs.getLong(ConstantsDataBase.COLUMN_TEACHERID);
                 if (!rs.wasNull()) {
-                    Teacher teacher = new Teacher();
-                    teacher.setId(teacherId);
-                    idea.setTeacher(teacher);
+                    idea.setTeacherId(teacherId);
                 }
-                
-                Long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
+
+                long studentId = rs.getLong(ConstantsDataBase.COLUMN_STUDENTID);
                 if (!rs.wasNull()) {
-                    Student student = new Student();
-                    student.setId(studentId);
-                    idea.setStudent(student);
+                    idea.setStudentId(studentId);
                 }
                 
                 // Adding the idea object to the list.
@@ -348,4 +344,38 @@ public class IdeaDAO implements Crudl<Idea> {
         // Returns the list of ideas (can be empty).
         return ideas;
     }
+
+    /**
+     * Convenience: return a Student by studentId value.
+     */
+    public Student getStudentById(long studentId) {
+        if (studentId <= 0) return null;
+        return studentDAO.read(studentId);
+    }
+
+    /**
+     * Convenience: return a Teacher by teacherId value.
+     */
+    public Teacher getTeacherById(long teacherId) {
+        if (teacherId <= 0) return null;
+        return teacherDAO.read(teacherId);
+    }
+
+    /**
+     * Return the Student associated with the given Idea (by idea.getStudentId()).
+     */
+    public Student getStudentByIdea(Idea idea) {
+        if (idea == null) return null;
+        return getStudentById(idea.getStudentId());
+    }
+
+    /**
+     * Return the Teacher associated with the given Idea (by idea.getTeacherId()).
+     */
+    public Teacher getTeacherByIdea(Idea idea) {
+        if (idea == null) return null;
+        return getTeacherById(idea.getTeacherId());
+    }
+
+
 }
