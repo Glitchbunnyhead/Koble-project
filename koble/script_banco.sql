@@ -18,6 +18,7 @@ CREATE TABLE student (
     email VARCHAR(60) NOT NULL UNIQUE,
     password VARCHAR(60) NOT NULL,
     phone VARCHAR(60),
+    birthdate DATE NOT NULL,
     PRIMARY KEY (student_id)
 );
 
@@ -74,7 +75,6 @@ CREATE TABLE idea (
     salary DECIMAL(10, 2), 
     requirements TEXT NOT NULL, 
     scholarship_quantity INT,
-    
     project_type ENUM('Teaching','Research','Extension') NOT NULL,
     
     ALTER TABLE project
@@ -88,7 +88,6 @@ CREATE TABLE idea (
 CREATE TABLE fellow (
     cpf VARCHAR(20) NOT NULL UNIQUE,
     lattes_curriculum VARCHAR(255),
-    birth_date DATE NOT NULL,
     project_id BIGINT NOT NULL,
     student_id BIGINT NOT NULL,
     FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE,
@@ -100,9 +99,8 @@ CREATE TABLE participant (
     participant_id BIGINT AUTO_INCREMENT, 
     cpf VARCHAR(20) UNIQUE,
     name VARCHAR(63) NOT NULL,
-    contact_number VARCHAR(30),
-    lattes_curriculum VARCHAR(255),
-    birth_date DATE, 
+    role VARCHAR(60) NOT NULL,
+    phone VARCHAR(20),
     project_id BIGINT NOT NULL, 
     
     PRIMARY KEY (participant_id), 
@@ -134,13 +132,6 @@ CREATE TABLE company_project (
     PRIMARY KEY (project_id, company_id)
 );
 
-	CREATE TABLE teacher_project (
-    project_id BIGINT,
-    teacher_id BIGINT,
-    FOREIGN KEY (teacher_id) REFERENCES teacher_staff(teacher_staff_id) ON DELETE CASCADE,
-    FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE,
-    PRIMARY KEY (project_id, teacher_id)
-);
 
 CREATE TABLE research (
     research_id BIGINT AUTO_INCREMENT,
@@ -163,7 +154,6 @@ CREATE TABLE educational (
     FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE
 );
 
----
 
 CREATE TABLE extension (
     extension_id BIGINT,
@@ -175,21 +165,6 @@ CREATE TABLE extension (
     FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE
 );
 	
-
-CREATE INDEX idx_idea_student ON idea(student_id);
-CREATE INDEX idx_idea_teacher ON idea(teacher_id);
-CREATE INDEX idx_participant_project ON participant(project_id);
-CREATE INDEX idx_participant_student ON participant(student_id);
-CREATE INDEX idx_participant_teacher ON participant(teacher_id);
-CREATE INDEX idx_participant_external ON participant(external_user_id);
-CREATE INDEX idx_fellow_project ON fellow(project_id);
-CREATE INDEX idx_fellow_student ON fellow(student_id);
-CREATE INDEX idx_project_type ON project(project_type);
-CREATE INDEX idx_teacher_idea_teacher ON teacher_idea(teacher_id);
-CREATE INDEX idx_student_idea_student ON student_idea(student_id);
-CREATE INDEX idx_company_project_company ON company_project(company_id);
-CREATE INDEX idx_teacher_project_teacher ON teacher_project(teacher_id);
-
 
 USE projeto;
 SELECT * FROM project;
