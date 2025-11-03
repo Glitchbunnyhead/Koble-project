@@ -7,25 +7,19 @@ public class Participant {
     private String name;
     private String cpf;
     private String phoneNumber;
-    private Date birthDate;
-    private Student isStudent;
-    private Teacher isTeacher;
-    private ExternalPerson isExternalPerson;
-    private Project project;
+    private String role;
+    private long projectId;
 
 
     //Constructor of the class
     public Participant(){}
 
-    public Participant(String name, String cpf, String phoneNumber, Date birthDate, Project project) {
+    public Participant(String name, String cpf, String phoneNumber, long projectId, String role) {
         this.name = name;
         this.cpf = cpf;
         this.phoneNumber = phoneNumber;
-        this.birthDate = birthDate;
-        this.project = project;
-        this.isStudent = null;
-        this.isTeacher = null;
-        this.isExternalPerson = null;
+        this.projectId = projectId;
+        this.role = role;
 
     }
 
@@ -62,44 +56,19 @@ public class Participant {
         this.phoneNumber = phoneNumber;
     }
 
-    public Date getBirthDate(){
-        return birthDate;
+    public String getRole() {
+        return role;
     }
 
-    public void setBirthDate(Date birthDate){
-        this.birthDate = birthDate;
+    public void setRole(String role) {
+        this.role = role;
     }
 
-    public Student getIsStudent(){
-        return isStudent;
-    }
-    
-    public void setIsStudent(Student isStudent){
-        this.isStudent = isStudent;
+    public long getProjectId() {
+        return projectId;
     }
 
-    public Teacher getIsTeacher(){
-        return isTeacher;
-    }
-    
-    public void setIsTeacher(Teacher isTeacher){
-        this.isTeacher = isTeacher;
-    }
-
-    public ExternalPerson getIsExternalPerson(){
-        return isExternalPerson;
-    }
-
-    public void setIsExternalPerson(ExternalPerson isExternalPerson){
-        this.isExternalPerson = isExternalPerson;
-
-    }
-
-    public Project getProject(){
-        return project;
-    }
-
-    public void setProject(Project project){
-        this.project = project;
+    public void setProjectId(long projectId) {
+        this.projectId = projectId;
     }
 }
