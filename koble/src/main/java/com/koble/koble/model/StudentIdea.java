@@ -2,31 +2,33 @@ package com.koble.koble.model;
 public class StudentIdea {
 
     //Declaring class attributes
-    private Idea idea;
-    private Student student;
+    private long ideaId;
+    private long studentId;
 
     //Constructor of the class
     public StudentIdea(){}
 
-    public StudentIdea(Idea idea, Student student) {
-        this.idea = idea;
-        this.student = student;
+    public StudentIdea(long idea, long student) {
+        this.ideaId = idea;
+        this.studentId = student;
     }
 
-    //Getters and Setters of the class
-    public Idea getIdea() {
-        return idea;
+    public long getIdeaId() {
+        return ideaId;
     }
 
-    public void setIdea(Idea idea) {
-        this.idea = idea;
+    public void setIdeaId(long ideaId) {
+        this.ideaId = ideaId;
     }
 
-    public Student getStudent() {
-        return student;
+    public long getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
     }
+
+    
+
 }
