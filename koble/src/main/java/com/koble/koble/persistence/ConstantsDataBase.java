@@ -1,11 +1,8 @@
 package com.koble.koble.persistence;
 
-//Class that contains all the constants used in the Database.
-//Main function is to define estructure.
-//Only change if the Database structure chages.
+
  public final class ConstantsDataBase {
 
-    //Tables names:
     public static final String TABLE_COMPANY = "company";
     public static final String TABLE_COMPANYPROJECT = "company_project";
     public static final String TABLE_EDUCATIONALPROJECT = "educational";
@@ -21,7 +18,6 @@ package com.koble.koble.persistence;
     public static final String TABLE_TEACHER = "teacher_staff";
     public static final String TABLE_TEACHERIDEA = "teacher_idea";
 
-    //Common column names:
     public static final String COLUMN_AIM = "objective";
     public static final String COLUMN_BIRTHDATE = "birthdate";
     public static final String COLUMN_COMPANYID = "companyid";
@@ -47,36 +43,29 @@ package com.koble.koble.persistence;
     public static final String COLUMN_TEACHERID = "teacher_id";
     public static final String COLUMN_TITLE = "title";
     
-    //Specific column names:
-    // Table: teacher_staff
+
     public static final String TEACHER_COLUNA_ID = "teacher_staff_id";
     public static final String TEACHER_COLUNA_SIAPE = "siape";
 
-    // Table: student
     public static final String STUDENT_COLUNA_ENROLLMENT = "enrollment";
     public static final String STUDENT_COLUNA_ID = "student_id";
 
-    // Table: company
     public static final String COMPANY_COLUNA_CNPJ = "cnpj";
     public static final String COMPANY_COLUNA_ID = "company_id";
 
-    // Table: external_user
     public static final String EXTERNAL_PERSON_COLUNA_ID = "external_user_id";
 
-    // Table: idea
     public static final String IDEA_COLUNA_AREA = "area";
     public static final String IDEA_COLUNA_DESCRIPTION = "description";
     public static final String IDEA_COLUNA_ID = "idea_id";
     public static final String IDEA_COLUNA_PROPOSER = "proposer";
     public static final String IDEA_COLUNA_TYPE = "type";
 
-    // Table: project (columns matched to script_banco.sql)
     public static final String PROJECT_COLUNA_ID = "project_id";
     public static final String PROJECT_COLUNA_TITLE = "title";
     public static final String PROJECT_COLUNA_SUBTITLE = "subtitle";
     public static final String PROJECT_COLUNA_COORDINATOR = "coordinator";
     public static final String PROJECT_COLUNA_DESCRIPTION = "description";
-    // timeline in the DB is named "timeline"
     public static final String PROJECT_COLUNA_TIMELINE = "timeline";
     public static final String PROJECT_COLUNA_EXTERNAL_LINK = "external_link";
     public static final String PROJECT_COLUNA_DURATION = "duration";
@@ -89,26 +78,21 @@ package com.koble.koble.persistence;
     public static final String PROJECT_COLUNA_SCHOLARSHIP_QUANTITY = "scholarship_quantity";
     public static final String PROJECT_COLUNA_TYPE = "project_type";
     
-    // Research project specific columns
     public static final String PROJECT_COLUNA_RESEARCH_OBJECTIVE = "research_objective";
     public static final String PROJECT_COLUNA_RESEARCH_JUSTIFICATION = "research_justification";
     public static final String PROJECT_COLUNA_RESEARCH_DISCIPLINE = "research_discipline";
     
-    // Extension project specific columns
     public static final String PROJECT_COLUNA_EXTENSION_TARGET_AUDIENCE = "extension_target_audience";
     public static final String PROJECT_COLUNA_EXTENSION_SLOTS = "extension_slots";
     public static final String PROJECT_COLUNA_EXTENSION_SELECTION_PROCESS = "extension_selection_process";
     
-    // Educational project specific columns
     public static final String PROJECT_COLUNA_EDUCATIONAL_SLOTS = "educational_slots";
     public static final String PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION = "educational_justification";
     public static final String PROJECT_COLUNA_EDUCATIONAL_COURSE = "educational_course";
 
-    // Table: participant
     public static final String PARTICIPANT_COLUNA_CONTACT_NUMBER = "contact_number";
     public static final String PARTICIPANT_COLUNA_ID = "participant_id";
 
-    //To avoid instantiation
     private ConstantsDataBase() {
         throw new UnsupportedOperationException();
     }
