@@ -12,14 +12,14 @@ public class Idea {
     private String area;
     private String description;
     private String type;
-    private Teacher teacher;
-    private Student student;
+    private long teacherId;
+    private long studentId;
 
     //Constructor of the class
     public Idea(){}
 
     public Idea(String proposer, String targetAudience, String justification, String title, String aim,
-            String subtitle, String area, String description, String type, Teacher teacher, Student student) {
+            String subtitle, String area, String description, String type, long teacher, long student) {
         this.proposer = proposer;
         this.targetAudience = targetAudience;
         this.justification = justification;
@@ -29,8 +29,8 @@ public class Idea {
         this.area = area;
         this.description = description;
         this.type = type;
-        this.teacher = teacher;
-        this.student = student;
+        this.teacherId = teacher;
+        this.studentId = student;
     }
 
     //Getters and Setters of the class
@@ -114,20 +114,20 @@ public class Idea {
         this.type = type;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public long getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacherId(long teacherId) {
+        this.teacherId = teacherId;
     }
 
-    public Student getStudent() {
-        return student;
+    public long getStudentId() {
+        return studentId;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
     }
 
     

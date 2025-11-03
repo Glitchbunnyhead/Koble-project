@@ -5,82 +5,45 @@ import java.util.Date;
 public class Fellow {
 
     //Declaring class attributes
-    private long id;
-    private Student student;
-    private Project project;
+    private long studentId;
+    private long projectId;
     private String cpf;
     private String lattesCurriculum;
-    private Date birthDate;
 
     //Constructor of the class
     public Fellow(){}
 
-    public Fellow(long id, Student student, Project project, String cpf, String lattesCurriculum, Date birthDate) {
-        this.id = id;
-        this.student = student;
-        this.project = project;
+    public Fellow(long studentId,long projectId, String cpf, String lattesCurriculum) {
+        this.studentId = studentId;
+        this.projectId = projectId;
         this.cpf = cpf;
         this.lattesCurriculum = lattesCurriculum;
-        this.birthDate = birthDate;
-    }
-
-    // Alternative constructor without id (for creating new instances)
-    public Fellow(Student student, Project project, String cpf, String lattesCurriculum, Date birthDate) {
-        this.student = student;
-        this.project = project;
-        this.cpf = cpf;
-        this.lattesCurriculum = lattesCurriculum;
-        this.birthDate = birthDate;
     }
 
     //Getters and Setters of the class
-    public Student getStudent() {
-        return student;
+    public long getStudentId() {
+        return studentId;
     }
-
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudentId(long studentId) {
+        this.studentId = studentId;
     }
-
-    public Project getProject() {
-        return project;
+    public long getProjectId() {
+        return projectId;
     }
-
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjectId(long projectId) {             
+        this.projectId = projectId;
     }
-
     public String getCpf() {
         return cpf;
     }
-
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
-
-    public String getLattesCurriculum() {
+    public String getLattesCurriculum() {       
         return lattesCurriculum;
     }
-
     public void setLattesCurriculum(String lattesCurriculum) {
         this.lattesCurriculum = lattesCurriculum;
     }
 
-  public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    
 }

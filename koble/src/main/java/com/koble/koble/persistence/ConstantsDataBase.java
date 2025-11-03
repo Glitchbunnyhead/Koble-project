@@ -24,7 +24,7 @@ package com.koble.koble.persistence;
 
     //Common column names:
     public static final String COLUMN_AIM = "objective";
-    public static final String COLUMN_BIRTHDATE = "birth_date";
+    public static final String COLUMN_BIRTHDATE = "birthdate";
     public static final String COLUMN_COMPANYID = "companyid";
     public static final String COLUMN_CPF = "cpf";
     public static final String COLUMN_DISCIPLINE = "discipline";
