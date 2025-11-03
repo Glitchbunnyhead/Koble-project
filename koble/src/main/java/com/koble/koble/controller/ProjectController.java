@@ -5,10 +5,12 @@ import com.koble.koble.model.EducationalProject;
 import com.koble.koble.model.ExtensionProject;
 import com.koble.koble.model.Project;
 import com.koble.koble.model.ResearchProject;
+import com.koble.koble.model.Teacher;
 import com.koble.koble.persistence.dataAccessObject.EducationalProjectDAO;
 import com.koble.koble.persistence.dataAccessObject.ExtensionProjectDAO;
 import com.koble.koble.persistence.dataAccessObject.ProjectDAO;
 import com.koble.koble.persistence.dataAccessObject.ResearchProjectDAO;
+import com.koble.koble.persistence.dataAccessObject.TeacherDAO;
 
 import java.util.List;
 
@@ -26,18 +28,35 @@ public class ProjectController {
     private final ResearchProjectDAO researchDAO;
     private final EducationalProjectDAO educationalDAO;
     private final ExtensionProjectDAO extensionDAO;
+    private final TeacherDAO teacherDAO;
 
     @Autowired
-    public ProjectController(ProjectDAO projectDAO, ResearchProjectDAO researchDAO, EducationalProjectDAO educationalDAO, ExtensionProjectDAO extensionDAO) {
+    public ProjectController(ProjectDAO projectDAO, ResearchProjectDAO researchDAO, 
+            EducationalProjectDAO educationalDAO, ExtensionProjectDAO extensionDAO,
+            TeacherDAO teacherDAO) {
         this.projectDAO = projectDAO;
         this.researchDAO = researchDAO;
         this.educationalDAO = educationalDAO;
         this.extensionDAO = extensionDAO;
+        this.teacherDAO = teacherDAO;
+    }
+
+    private boolean validateCoordinator(Project project) {
+        if (project.getCoordinator() == null || project.getCoordinator().trim().isEmpty()) {
+            return false;
+        }
+        // Check if the coordinator exists in the TeacherDAO
+        Teacher teacher = teacherDAO.findByName(project.getCoordinator());
+        return teacher != null;
     }
 
     @PostMapping("/research")
     @Transactional 
     public ResponseEntity<ResearchProject> createResearchProject(@RequestBody ResearchProject researchProject) {
+        // Validate the coordinator
+        if (!validateCoordinator(researchProject)) {
+            return ResponseEntity.badRequest().body(null);
+        }
         
         Project rootProject = null;
         try {
@@ -68,6 +87,10 @@ public class ProjectController {
     @PostMapping("/educational")
     @Transactional 
     public ResponseEntity<EducationalProject> createEducationalProject(@RequestBody EducationalProject educationalProject) {
+        // Validate the coordinator
+        if (!validateCoordinator(educationalProject)) {
+            return ResponseEntity.badRequest().body(null);
+        }
         
         Project rootProject = null;
         try {
@@ -100,6 +123,10 @@ public class ProjectController {
     @PostMapping("/extension")
     @Transactional 
     public ResponseEntity<ExtensionProject> createExtensionProject(@RequestBody ExtensionProject extensionProject) {
+        // Validate the coordinator
+        if (!validateCoordinator(extensionProject)) {
+            return ResponseEntity.badRequest().body(null);
+        }
         
         Project rootProject = null;
         try {

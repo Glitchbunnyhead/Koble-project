@@ -6,7 +6,7 @@ public abstract class Project {
     private long id;
     private String title;
     private String subtitle;
-    private String coordinator;
+    private String coordinator; // Nome do professor que é coordinator
     private String description;
     private String timeline;
     private String externalLink; 
@@ -25,7 +25,10 @@ public abstract class Project {
     public Project() {
     }
 
-    public Project(String complementHours, String coordinator, String description, String duration, double salary, String image, String externalLink, String requirements, boolean scholarship, String subtitle, String timeline, String title, String type, String typeId,String scholarshipType, int scholarshipQuantity) {
+    public Project(String complementHours, String coordinator, String description, 
+            String duration, double salary, String image, String externalLink, String requirements, 
+            boolean scholarship, String subtitle, String timeline, String title, String type, 
+            String typeId, String scholarshipType, int scholarshipQuantity) {
         this.complementHours = complementHours;
         this.coordinator = coordinator;
         this.description = description;
@@ -170,8 +173,8 @@ public abstract class Project {
         return coordinator;
     }
 
-    public void setCoordinator(String coordenator) {
-        this.coordinator = coordenator;
+    public void setCoordinator(String coordinator) {
+        this.coordinator = coordinator;
     }
 
     public String getType() {

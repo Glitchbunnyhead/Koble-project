@@ -20,7 +20,6 @@ package com.koble.koble.persistence;
     public static final String TABLE_STUDENTIDEA = "student_idea";
     public static final String TABLE_TEACHER = "teacher_staff";
     public static final String TABLE_TEACHERIDEA = "teacher_idea";
-    public static final String TABLE_TEACHERPROJECT = "teacher_project";
 
     //Common column names:
     public static final String COLUMN_AIM = "objective";

@@ -1,7 +1,4 @@
 
-
-
-
 package com.koble.koble.persistence.dataAccessObject;
 
 //Importing Java utilitys.
@@ -31,6 +28,7 @@ public class TeacherDAO implements Crudl<Teacher> {
     public TeacherDAO(MySqlConnection connection){
         this.connection = connection;
     }
+
 
     @Override
     //Method to create a new register in the Database (MySql code for do this action):
@@ -76,6 +74,45 @@ public class TeacherDAO implements Crudl<Teacher> {
 
         System.out.println("Teacher created successfully");
         return teacher;
+    }
+
+    // Method to find a teacher by name
+    public Teacher findByName(String name) {
+        // Opening the connection to the Database.
+        this.connection.openConnection();
+        // Select SQL sentence.
+        String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_TEACHER +
+                " WHERE " + ConstantsDataBase.COLUMN_NAME + " = ?";
+
+        try {
+            // Creating a PreparedStatement to execute the SQL sentence.
+            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+            
+            // Setting the value of the PreparedStatement (the teacher's name).
+            st.setString(1, name);
+
+            // Executing the select operation.
+            ResultSet rs = st.executeQuery();
+
+            if (rs.next()) {
+                Teacher teacher = new Teacher();
+                teacher.setId(rs.getLong(ConstantsDataBase.TEACHER_COLUNA_ID));
+                teacher.setSiape(rs.getString(ConstantsDataBase.TEACHER_COLUNA_SIAPE));
+                teacher.setEmail(rs.getString(ConstantsDataBase.COLUMN_EMAIL));
+                teacher.setName(rs.getString(ConstantsDataBase.COLUMN_NAME));
+                teacher.setPassword(rs.getString(ConstantsDataBase.COLUMN_PASSWORD));
+                teacher.setPhoneNumber(rs.getString(ConstantsDataBase.COLUMN_PHONE));
+                return teacher;
+            }
+            return null;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+        finally {
+            connection.closeConnection();
+        }
     }
 
     @Override

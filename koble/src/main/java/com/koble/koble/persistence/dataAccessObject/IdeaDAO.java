@@ -34,6 +34,52 @@ public class IdeaDAO implements Crudl<Idea> {
         this.teacherDAO = teacherDAO;
     }
 
+    /**
+     * Sets the teacherId of an Idea based on a Teacher object
+     * @param idea The idea to update
+     * @param teacher The teacher whose ID will be set as teacherId
+     * @return true if the update was successful, false otherwise
+     */
+    public boolean setTeacherIdFromTeacher(Idea idea, Teacher teacher) {
+        if (idea == null || teacher == null) {
+            return false;
+        }
+
+        // Opening the connection to the Database.
+        this.connection.openConnection();
+        
+        // Update SQL sentence
+        String sql = "UPDATE " + ConstantsDataBase.TABLE_IDEA + 
+                    " SET " + ConstantsDataBase.COLUMN_TEACHERID + " = ? " +
+                    " WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
+
+        try {
+            // Creating a PreparedStatement to execute the SQL sentence.
+            PreparedStatement st = connection.getConnection().prepareStatement(sql);
+            
+            // Setting the values of the PreparedStatement
+            st.setLong(1, teacher.getId());
+            st.setLong(2, idea.getId());
+            
+            // Executing the update operation and getting the number of affected rows
+            int rowsAffected = st.executeUpdate();
+            
+            // If the update was successful, update the idea object in memory
+            if (rowsAffected > 0) {
+                idea.setTeacherId(teacher.getId());
+                return true;
+            }
+            
+            return false;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            connection.closeConnection();
+        }
+    }
+
     @Override
     //Method to create a new register in the Database (MySql code for do this action):
     public Idea create(Idea idea) {
