@@ -1,0 +1,138 @@
+@startuml
+
+package "com.koble.koble.model" {
+
+  abstract class Project {
+    - id : long
+    - title : String
+    - subtitle : String
+    - coordinator : String
+    - description : String
+    - timeline : String
+    - externalLink : String
+    - duration : String
+    - image : String
+    - complementHours : String
+    - scholarshipAvailable : boolean
+    - scholarshipType : String
+    - salary : double
+    - requirements : String
+    - scholarshipQuantity : int
+    - type : String
+    - typeId : String
+  }
+
+  class ResearchProject {
+    - objective : String
+    - justification : String
+    - discipline : String
+  }
+
+  class EducationalProject {
+    - slots : int
+    - justification : String
+    - course : String
+  }
+
+  class ExtensionProject {
+    - targetAudience : String
+    - slots : int
+    - selectionProcess : String
+  }
+
+  class Teacher {
+    - id : long
+    - siape : String
+    - email : String
+    - name : String
+    - password : String
+    - phoneNumber : String
+  }
+
+  class Company {
+    - id : long
+    - cnpj : String
+    - name : String
+    - email : String
+    - password : String
+    - phoneNumber : String
+  }
+
+  class ExternalPerson {
+    - id : long
+    - name : String
+    - email : String
+    - password : String
+    - phoneNumber : String
+  }
+
+  class Student {
+    - id : long
+    - registration : String
+    - name : String
+    - email : String
+    - password : String
+    - phoneNumber : String
+    - birthDate : Date
+  }
+
+  class Fellow {
+    - studentId : long
+    - projectId : long
+    - cpf : String
+    - lattesCurriculum : String
+  }
+
+  class Participant {
+    - id : long
+    - name : String
+    - cpf : String
+    - phoneNumber : String
+    - role : String
+    - projectId : long
+  }
+
+  class Idea {
+    - id : long
+    - proposer : String
+    - targetAudience : String
+    - justification : String
+    - title : String
+    - aim : String
+    - subtitle : String
+    - area : String
+    - description : String
+    - type : String
+    - teacherId : long
+    - studentId : long
+  }
+
+  class CompanyProject {
+    - companyId : long
+    - projectId : long
+  }
+
+  class StudentIdea {
+    - ideaId : long
+    - studentId : long
+  }
+
+  Project <|-- ResearchProject
+  Project <|-- EducationalProject
+  Project <|-- ExtensionProject
+
+  Idea ..> Teacher : teacherId
+  Idea ..> Student : studentId
+
+  Participant ..> Project : projectId
+  Fellow ..> Student : studentId
+  Fellow ..> Project : projectId
+
+  CompanyProject ..> Company : companyId
+  CompanyProject ..> Project : projectId
+
+  StudentIdea ..> Student : studentId
+  StudentIdea ..> Idea : ideaId
+}
+
+@enduml

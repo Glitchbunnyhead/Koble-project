@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(teacher, "Teacher", "Docente que coordena e consulta projetos")
+Person(student, "Student", "Aluno que participa/propõe ideias/projetos")
+Person(company, "Company", "Empresa parceira")
+Person(external, "External Person", "Usuário externo")
+
+System(koble, "Koble", "Back-end de projetos e ideias")
+
+Rel(teacher, koble, "Usa", "HTTP/JSON")
+Rel(student, koble, "Usa", "HTTP/JSON")
+Rel(company, koble, "Usa", "HTTP/JSON")
+Rel(external, koble, "Usa", "HTTP/JSON")
+
+@enduml
