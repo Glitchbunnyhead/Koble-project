@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Projeto - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+    <link rel="stylesheet" href="projectCreation.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">meus projetos</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="page-container">
+        <div class="creation-header">
+            <h1>🎯 Criar Novo Projeto</h1>
+            <p class="subtitle">Crie um projeto acadêmico e encontre colaboradores qualificados</p>
+        </div>
+
+        <!-- Project Creation Form -->
+        <div class="form-container">
+            <form id="projectCreationForm" class="project-form">
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h2>📋 Informações Básicas</h2>
+                    
+                    <div class="input-group">
+                        <label for="projectTitle">Título do Projeto *</label>
+                        <input type="text" id="projectTitle" name="title" required 
+                               placeholder="Digite o título do seu projeto">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectSubtitle">Subtítulo</label>
+                        <input type="text" id="projectSubtitle" name="subtitle" 
+                               placeholder="Breve descrição do projeto">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectDescription">Descrição Detalhada *</label>
+                        <textarea id="projectDescription" name="description" required 
+                                  placeholder="Descreva os objetivos, metodologia e resultados esperados do projeto"></textarea>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="projectType">Tipo de Projeto *</label>
+                            <select id="projectType" name="type" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="research">Pesquisa</option>
+                                <option value="educational">Educacional</option>
+                                <option value="extension">Extensão</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="projectDuration">Duração *</label>
+                            <input type="text" id="projectDuration" name="duration" required 
+                                   placeholder="Ex: 6 meses, 1 ano">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline and Requirements Section -->
+                <div class="form-section">
+                    <h2>📅 Cronograma e Requisitos</h2>
+                    
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="projectTimeline">Cronograma *</label>
+                            <input type="text" id="projectTimeline" name="timeline" required 
+                                   placeholder="Ex: 2024-2025">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="complementHours">Horas Complementares</label>
+                            <input type="number" id="complementHours" name="complementHours" 
+                                   placeholder="Ex: 60">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="projectRequirements">Requisitos *</label>
+                        <textarea id="projectRequirements" name="requirements" required 
+                                  placeholder="Descreva os requisitos necessários para participação"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="externalLink">Link Externo</label>
+                        <input type="url" id="externalLink" name="externalLink" 
+                               placeholder="Link para mais informações ou inscrições">
+                    </div>
+                </div>
+
+                <!-- Scholarship Section -->
+                <div class="form-section">
+                    <h2>💰 Informações sobre Bolsa</h2>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="scholarshipAvailable" name="scholarshipAvailable">
+                            <span class="checkmark"></span>
+                            Este projeto oferece bolsa de estudos
+                        </label>
+                    </div>
+
+                    <div id="scholarshipDetails" class="scholarship-details" style="display: none;">
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="scholarshipValue">Valor da Bolsa (R$)</label>
+                                <input type="number" id="scholarshipValue" name="salary" step="0.01" 
+                                       placeholder="Ex: 400.00">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="scholarshipQuantity">Quantidade de Bolsas</label>
+                                <input type="number" id="scholarshipQuantity" name="scholarshipQuantity" 
+                                       placeholder="Ex: 2">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="scholarshipType">Tipo de Bolsa</label>
+                            <input type="text" id="scholarshipType" name="scholarshipType" 
+                                   placeholder="Ex: Iniciação Científica, Monitoria">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Type-Specific Fields -->
+                <div id="typeSpecificFields" class="form-section" style="display: none;">
+                    <!-- Research Project Fields -->
+                    <div id="researchFields" class="type-fields" style="display: none;">
+                        <h2>🔬 Detalhes da Pesquisa</h2>
+                        
+                        <div class="input-group">
+                            <label for="researchObjective">Objetivo da Pesquisa *</label>
+                            <textarea id="researchObjective" name="objective" 
+                                      placeholder="Descreva o objetivo principal da pesquisa"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="researchJustification">Justificativa *</label>
+                            <textarea id="researchJustification" name="justification" 
+                                      placeholder="Justifique a importância e relevância da pesquisa"></textarea>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="researchDiscipline">Disciplina/Área *</label>
+                            <input type="text" id="researchDiscipline" name="discipline" 
+                                   placeholder="Ex: Ciência da Computação, Biologia">
+                        </div>
+                    </div>
+
+                    <!-- Educational Project Fields -->
+                    <div id="educationalFields" class="type-fields" style="display: none;">
+                        <h2>📚 Detalhes do Projeto Educacional</h2>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="educationalSlots">Vagas Disponíveis</label>
+                                <input type="number" id="educationalSlots" name="slots" 
+                                       placeholder="Ex: 10">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="educationalCourse">Curso</label>
+                                <input type="text" id="educationalCourse" name="course" 
+                                       placeholder="Ex: Engenharia de Software">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="educationalJustification">Justificativa Educacional</label>
+                            <textarea id="educationalJustification" name="justification" 
+                                      placeholder="Explique a importância educacional do projeto"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Extension Project Fields -->
+                    <div id="extensionFields" class="type-fields" style="display: none;">
+                        <h2>🌍 Detalhes do Projeto de Extensão</h2>
+                        
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label for="extensionSlots">Vagas Disponíveis</label>
+                                <input type="number" id="extensionSlots" name="slots" 
+                                       placeholder="Ex: 15">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="targetAudience">Público-Alvo</label>
+                                <input type="text" id="targetAudience" name="targetAudience" 
+                                       placeholder="Ex: Estudantes de graduação">
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="selectionProcess">Processo Seletivo</label>
+                            <textarea id="selectionProcess" name="selectionProcess" 
+                                      placeholder="Descreva como será o processo de seleção dos participantes"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" id="cancelBtn" class="btn btn-secondary">
+                        ❌ Cancelar
+                    </button>
+                    <button type="button" id="previewBtn" class="btn btn-outline">
+                        👁️ Visualizar
+                    </button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        ✅ Criar Projeto
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👁️ Visualização do Projeto</h2>
+                <button class="close-btn" onclick="projectCreationManager.closePreview()">×</button>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview content will be generated here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="projectCreationManager.closePreview()">
+                    Fechar
+                </button>
+                <button class="btn btn-primary" onclick="projectCreationManager.submitProject()">
+                    Confirmar e Criar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal" style="display: none;">
+        <div class="modal-content success">
+            <div class="modal-header">
+                <h2>🎉 Projeto Criado com Sucesso!</h2>
+            </div>
+            <div class="modal-body">
+                <p>Seu projeto foi criado e está agora disponível para candidaturas.</p>
+                <div class="success-actions">
+                    <button class="btn btn-primary" onclick="projectCreationManager.viewProject()">
+                        Ver Projeto
+                    </button>
+                    <button class="btn btn-outline" onclick="projectCreationManager.createAnother()">
+                        Criar Outro Projeto
+                    </button>
+                    <button class="btn btn-secondary" onclick="projectCreationManager.goToMyProjects()">
+                        Meus Projetos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Criando projeto...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="projectCreation.js"></script>
+</body>
+</html>

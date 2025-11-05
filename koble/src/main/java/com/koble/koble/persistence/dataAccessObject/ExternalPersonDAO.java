@@ -45,7 +45,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
     @Override
     public String delete(long id) {
         String sql = "DELETE FROM " + ConstantsDataBase.TABLE_EXTERNALPERSON +
-                     " WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
+                     " WHERE " + ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + " = ?";
 
         connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
@@ -70,7 +70,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
                 ConstantsDataBase.COLUMN_EMAIL + " = ?, " +
                 ConstantsDataBase.COLUMN_PASSWORD + " = ?, " +
                 ConstantsDataBase.COLUMN_PHONE + " = ? " +
-                "WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
+                "WHERE " + ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + " = ?";
 
         connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
@@ -96,7 +96,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
     public ExternalPerson read(long id) {
         ExternalPerson externalPerson = null;
         String sql = "SELECT * FROM " + ConstantsDataBase.TABLE_EXTERNALPERSON +
-                     " WHERE " + ConstantsDataBase.COLUMN_ID + " = ?";
+                     " WHERE " + ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID + " = ?";
 
         connection.openConnection();
         try (PreparedStatement st = connection.getConnection().prepareStatement(sql)) {
@@ -137,7 +137,7 @@ public class ExternalPersonDAO implements Crudl<ExternalPerson> {
 
     private ExternalPerson mapResultSetToExternalPerson(ResultSet rs) throws SQLException {
         ExternalPerson externalPerson = new ExternalPerson();
-        externalPerson.setId(rs.getLong(ConstantsDataBase.COLUMN_ID));
+        externalPerson.setId(rs.getLong(ConstantsDataBase.EXTERNAL_PERSON_COLUNA_ID));
         externalPerson.setName(rs.getString(ConstantsDataBase.COLUMN_NAME));
         externalPerson.setEmail(rs.getString(ConstantsDataBase.COLUMN_EMAIL));
         externalPerson.setPassword(rs.getString(ConstantsDataBase.COLUMN_PASSWORD));

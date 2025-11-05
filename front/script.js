@@ -1,148 +1,247 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Search Bar Elements
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchResults = document.getElementById('searchResults');
+    // Check authentication requirement for this page
+    console.log('=== HOME PAGE LOADED ===');
+    console.log('Current user on page load:', SessionManager.getUser());
+    console.log('Is logged in on page load:', SessionManager.isLoggedIn());
+    
+    SessionManager.checkAuthRequirement();
+    
+    //start of new simple carousel
+    initializeSimpleCarousel();
 
-    // Sample data - replace with your actual data or API calls
-    const sampleData = [
-        { type: 'project', title: 'AI Research Project', description: 'Machine Learning Applications' },
-        { type: 'project', title: 'Web Development Project', description: 'Full Stack Development' },
-        { type: 'project', title: 'Data Science Initiative', description: 'Big Data Analytics' },
-        { type: 'teacher', title: 'Dr. Smith', description: 'Computer Science Professor' },
-        { type: 'teacher', title: 'Prof. Johnson', description: 'Data Science Researcher' },
-        { type: 'company', title: 'Tech Corp', description: 'Software Development Company' },
-        { type: 'company', title: 'Innovation Labs', description: 'AI Research Company' }
-    ];
-
-    // Search function
-    async function performSearch(query) {
-        if (query.trim() === '') {
-            hideSearchResults();
+    // Simple, reliable carousel implementation
+    async function initializeSimpleCarousel() {
+        console.log('🎠 Initializing Simple Carousel');
+        
+        const track = document.getElementById('carouselTrack');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicators = document.getElementById('carouselIndicators');
+        
+        if (!track || !prevBtn || !nextBtn || !indicators) {
+            console.error('Carousel elements not found');
             return;
         }
-
-        // Filter data based on query
-        try{
-            results = sampleData;
-            displaySearchResults(results);
-        }catch(error){
-            console.log(error);
-            displaySearchResults([]);
-        }
-
-        /*try {
-            const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(query)}`);
-            const results = await response.json();
-            displaySearchResults(results);
+        
+        let projects = [];
+        let currentPage = 0;
+        
+        // Load projects
+        try {
+            projects = await loadAllProjects();
+            if (projects.length === 0) {
+                showEmptyCarousel();
+                return;
+            }
         } catch (error) {
-            console.error('Search error:', error);
-            displaySearchResults([]);
+            console.error('Failed to load projects:', error);
+            showEmptyCarousel();
+            return;
         }
-        */
-    }
-
-    // Display search results
-    function displaySearchResults(results) {
-        searchResults.innerHTML = '';
-
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="result-item">No results found</div>';
-        } else {
-            results.forEach(result => {
-                const resultItem = document.createElement('div');
-                resultItem.className = 'result-item';
-                resultItem.innerHTML = `
-                    <strong>${result.title}</strong> <span style="color: #666;">(${result.type})</span>
-                    <br>
-                    <small style="color: #888;">${result.description}</small>
+        
+        // Render carousel
+        renderCarousel();
+        
+        // Set up navigation
+        prevBtn.onclick = () => {
+            if (currentPage > 0) {
+                currentPage--;
+                updateCarousel();
+            }
+        };
+        
+        nextBtn.onclick = () => {
+            const totalPages = Math.ceil(projects.length / 3);
+            if (currentPage < totalPages - 1) {
+                currentPage++;
+                updateCarousel();
+            }
+        };
+        
+        // Load all projects from API
+        async function loadAllProjects() {
+            try {
+                console.log('🚀 Starting to load all projects...');
+                
+                const [research, educational, extension] = await Promise.all([
+                    ProjectAPI.getResearchProjects()
+                        .then(result => {
+                            console.log('🔬 Research API response:', result);
+                            return result;
+                        })
+                        .catch(error => {
+                            console.error('❌ Research API error:', error);
+                            return { success: false, data: [], error: error.message };
+                        }),
+                    ProjectAPI.getEducationalProjects()
+                        .then(result => {
+                            console.log('🎓 Educational API response:', result);
+                            return result;
+                        })
+                        .catch(error => {
+                            console.error('❌ Educational API error:', error);
+                            return { success: false, data: [], error: error.message };
+                        }),
+                    ProjectAPI.getExtensionProjects()
+                        .then(result => {
+                            console.log('🌍 Extension API response:', result);
+                            return result;
+                        })
+                        .catch(error => {
+                            console.error('❌ Extension API error:', error);
+                            return { success: false, data: [], error: error.message };
+                        })
+                ]);
+                
+                let allProjects = [];
+                
+                if (research.success && Array.isArray(research.data)) {
+                    console.log(`✅ Adding ${research.data.length} research projects`);
+                    allProjects.push(...research.data);
+                } else {
+                    console.warn('⚠️ Research projects failed or empty:', research);
+                }
+                
+                if (educational.success && Array.isArray(educational.data)) {
+                    console.log(`✅ Adding ${educational.data.length} educational projects`);
+                    allProjects.push(...educational.data);
+                } else {
+                    console.warn('⚠️ Educational projects failed or empty:', educational);
+                }
+                
+                if (extension.success && Array.isArray(extension.data)) {
+                    console.log(`✅ Adding ${extension.data.length} extension projects`);
+                    allProjects.push(...extension.data);
+                } else {
+                    console.warn('⚠️ Extension projects failed or empty:', extension);
+                }
+                
+                console.log(`📋 Total loaded projects: ${allProjects.length}`);
+                console.log('🔍 All projects array:', allProjects);
+                return allProjects;
+            } catch (error) {
+                console.error('💥 Critical error loading projects:', error);
+                return [];
+            }
+        }
+        
+        // Render the carousel HTML
+        function renderCarousel() {
+            track.innerHTML = '';
+            indicators.innerHTML = '';
+            
+            // Create slides
+            projects.forEach((project, index) => {
+                const slide = document.createElement('div');
+                slide.className = `carousel-slide slide-bg-${(index % 3) + 1}`;
+                slide.style.width = '33.33vw';
+                slide.style.cursor = 'pointer';
+                
+                slide.innerHTML = `
+                    <div class="slide-content">
+                        <h2>${project.title || 'Untitled Project'}</h2>
+                        <h3>${project.subtitle || ''}</h3>
+                        <p>${(project.description || '').substring(0, 100)}${project.description && project.description.length > 100 ? '...' : ''}</p>
+                        <div class="project-details">
+                            <span class="coordinator">Coordenador: ${project.coordinator || 'N/A'}</span>
+                            <span class="duration">Duração: ${project.duration || 'N/A'}</span>
+                            ${project.scholarshipAvailable ? `<span class="fellowship">Bolsa: R$ ${(project.salary || 0).toFixed(2)}</span>` : ''}
+                        </div>
+                    </div>
                 `;
                 
-                // Add click handler for each result
-                resultItem.addEventListener('click', () => {
-                    selectSearchResult(result);
-                });
-
-                searchResults.appendChild(resultItem);
+                slide.onclick = () => {
+                    sessionStorage.setItem('selectedProject', JSON.stringify(project));
+                    window.location.href = '/front/pages/project page/project.html';
+                };
+                
+                track.appendChild(slide);
             });
+            
+            // Set track width based on number of elements (each 33.33vw)
+            track.style.width = `${projects.length * 33.33}vw`;
+            
+            // Create indicators
+            const totalPages = Math.ceil(projects.length / 3);
+            for (let i = 0; i < totalPages; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = `indicator ${i === 0 ? 'active' : ''}`;
+                indicator.onclick = () => {
+                    currentPage = i;
+                    updateCarousel();
+                };
+                indicators.appendChild(indicator);
+            }
+            
+            updateCarousel();
         }
-
-        showSearchResults();
-    }
-
-    // Show search results
-    function showSearchResults() {
-        searchResults.classList.remove('hidden');
-    }
-
-    // Hide search results
-    function hideSearchResults() {
-        searchResults.classList.add('hidden');
-    }
-
-    // Handle result selection
-    function selectSearchResult(result) {
-        searchInput.value = result.title;
-        hideSearchResults();
         
-        // You can add navigation logic here
-        console.log('Selected:', result);
+        // Update carousel position and indicators
+        function updateCarousel() {
+            // Move by 100vw (3 slides × 33.33vw each) per page to match slide widths
+            const translateX = -(currentPage * 100);
+            track.style.transform = `translateX(${translateX}vw)`;
+            
+            // Update indicators
+            const allIndicators = indicators.querySelectorAll('.indicator');
+            allIndicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentPage);
+            });
+            
+            // Update button states
+            const totalPages = Math.ceil(projects.length / 3);
+            prevBtn.disabled = currentPage === 0;
+            nextBtn.disabled = currentPage === totalPages - 1;
+        }
         
-        // Example: redirect based on type
-        switch(result.type) {
-            case 'project':
-                // window.location.href = `pages/project-details.html?id=${result.id}`;
-                alert(`Opening project: ${result.title}`);
-                break;
-            case 'teacher':
-                // window.location.href = `pages/teacher-profile.html?id=${result.id}`;
-                alert(`Opening teacher profile: ${result.title}`);
-                break;
-            case 'company':
-                // window.location.href = `pages/company-profile.html?id=${result.id}`;
-                alert(`Opening company profile: ${result.title}`);
-                break;
+        // Show empty state
+        function showEmptyCarousel() {
+            track.innerHTML = `
+                <div class="carousel-slide" style="width: 100vw;">
+                    <div class="slide-content">
+                        <h3>📋 Nenhum projeto disponível</h3>
+                        <p>Não há projetos para exibir no momento.</p>
+                    </div>
+                </div>
+            `;
+            indicators.innerHTML = '<button class="indicator active"></button>';
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
         }
     }
 
-    // Event Listeners
-    searchInput.addEventListener('input', function() {
-        const query = this.value;
-        performSearch(query);
-    });
+    function redirectExtension(){
+        div = document.getElementById("extensionHomeRedirect");
 
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            const query = this.value;
-            performSearch(query);
+        if (div) {
+            div.addEventListener('click', function(){
+                window.location.href = '/front/pages/specific homes/extensionHome.html'
+            })
         }
-    });
+    }
 
-    searchBtn.addEventListener('click', function() {
-        const query = searchInput.value;
-        performSearch(query);
-    });
+    function redirectEnsino(){
+        div = document.getElementById("teachingHomeRedirect");
 
-    // Hide search results when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.search-container')) {
-            hideSearchResults();
+        if (div) {
+            div.addEventListener('click', function(){
+                window.location.href = '/front/pages/specific homes/teachingHome.html'
+            })
         }
-    });
+    }
 
+    function redirectResearch(){
+        div = document.getElementById("researchHomeRedirect");
+
+        if (div) {
+            div.addEventListener('click', function(){
+                window.location.href = '/front/pages/specific homes/researchHome.html'
+            })
+        }
+    }
+
+    //redirects
+    redirectResearch();
+    redirectEnsino();
+    redirectExtension();
 });
-
-/* Optional: Function to integrate with your Spring Boot API
-async function searchAPI(query) {
-    try {
-        // Example API call to your Spring Boot backend
-        const response = await fetch(`http://localhost:8080/api/search?q=${encodeURIComponent(query)}`);
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Search API error:', error);
-        return [];
-    }
-}
-*/

@@ -4,11 +4,13 @@ import java.util.Date;
 
 public class Fellow {
 
+    //Declaring class attributes
     private long studentId;
     private long projectId;
     private String cpf;
     private String lattesCurriculum;
 
+    //Constructor of the class
     public Fellow(){}
 
     public Fellow(long studentId,long projectId, String cpf, String lattesCurriculum) {
@@ -18,6 +20,7 @@ public class Fellow {
         this.lattesCurriculum = lattesCurriculum;
     }
 
+    //Getters and Setters of the class
     public long getStudentId() {
         return studentId;
     }

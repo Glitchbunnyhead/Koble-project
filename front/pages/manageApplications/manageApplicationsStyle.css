@@ -1,0 +1,589 @@
+/* Manage Applications Page Styles */
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 80px);
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.page-subtitle {
+    color: #7f8c8d;
+    font-size: 16px;
+}
+
+/* Visual Mode Banner */
+.visual-mode-banner {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 1px solid #ffeaa7;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    animation: visualModePulse 2s ease-in-out infinite alternate;
+}
+
+.visual-mode-icon {
+    font-size: 18px;
+    animation: bounce 1.5s ease-in-out infinite;
+}
+
+.visual-mode-text {
+    color: #856404;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+}
+
+@keyframes visualModePulse {
+    0% { background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); }
+    100% { background: linear-gradient(135deg, #ffeaa7 0%, #fff3cd 100%); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Controls Section */
+.controls-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+}
+
+.filter-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+}
+
+.stats-summary {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.stat-item:nth-child(1) {
+    background-color: #3498db;
+    color: white;
+}
+
+.stat-item:nth-child(2) {
+    background-color: #f39c12;
+    color: white;
+}
+
+.stat-item:nth-child(3) {
+    background-color: #27ae60;
+    color: white;
+}
+
+/* Applications Grid */
+.applications-container {
+    margin-top: 20px;
+}
+
+.applications-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.application-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid #3498db;
+    cursor: pointer;
+}
+
+.application-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.application-card.pending {
+    border-left-color: #f39c12;
+}
+
+.application-card.approved {
+    border-left-color: #27ae60;
+}
+
+.application-card.rejected {
+    border-left-color: #e74c3c;
+}
+
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
+
+.candidate-info h3 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.candidate-info p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.application-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: flex-end;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background-color: #f39c12;
+    color: white;
+}
+
+.status-badge.approved {
+    background-color: #27ae60;
+    color: white;
+}
+
+.status-badge.rejected {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.type-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.type-badge.participant {
+    background-color: #3498db;
+    color: white;
+}
+
+.type-badge.fellow {
+    background-color: #9b59b6;
+    color: white;
+}
+
+.project-info {
+    margin-bottom: 15px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.project-info h4 {
+    margin: 0 0 8px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.project-info p {
+    margin: 0;
+    color: #7f8c8d;
+    font-size: 14px;
+}
+
+.application-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #95a5a6;
+    margin-bottom: 15px;
+}
+
+.quick-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.quick-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-approve {
+    background-color: #27ae60;
+    color: white;
+}
+
+.btn-approve:hover {
+    background-color: #219a52;
+}
+
+.btn-reject {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-reject:hover {
+    background-color: #c0392b;
+}
+
+/* Current status button styles */
+.btn-approve.current-status,
+.btn-reject.current-status {
+    opacity: 0.7;
+    cursor: not-allowed;
+    font-weight: bold;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-approve.current-status:hover,
+.btn-reject.current-status:hover {
+    transform: none;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    background-color: inherit;
+}
+
+.btn-details {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-details:hover {
+    background-color: #2980b9;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close {
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+
+.detail-section h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.detail-section p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.status-current {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #7f8c8d;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.empty-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.empty-state h3 {
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: #7f8c8d;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .controls-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .stats-summary {
+        justify-content: center;
+    }
+    
+    .applications-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .modal-footer {
+        flex-direction: column;
+    }
+}
+
+/* Visual Change Indicator Styles */
+.visual-change-indicator {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #e8f4fd 0%, #d4e8fc 100%);
+    border: 1px solid #b8daff;
+    border-radius: 6px;
+    border-left: 4px solid #007bff;
+    font-size: 12px;
+}
+
+.indicator-badge {
+    display: inline-block;
+    background: #007bff;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 11px;
+}
+
+.indicator-time {
+    color: #6c757d;
+    font-style: italic;
+    display: block;
+    margin-top: 3px;
+    line-height: 1.2;
+}
+
+/* Animation for visual indicator */
+.visual-change-indicator {
+    animation: visualChangeGlow 0.5s ease-in-out;
+}
+
+@keyframes visualChangeGlow {
+    0% { background: #fff3cd; border-color: #ffeaa7; }
+    100% { background: linear-gradient(135deg, #e8f4fd 0%, #d4e8fc 100%); border-color: #b8daff; }
+}
+
+/* Enhanced status badges for visual changes */
+.application-card.approved .visual-change-indicator {
+    background: linear-gradient(135deg, #f0f9f0 0%, #e6f7e6 100%);
+    border-left-color: #28a745;
+    border-color: #c3e6cb;
+}
+
+.application-card.approved .indicator-badge {
+    background: #28a745;
+}
+
+.application-card.rejected .visual-change-indicator {
+    background: linear-gradient(135deg, #fdf2f2 0%, #fce8e8 100%);
+    border-left-color: #dc3545;
+    border-color: #f5c6cb;
+}
+
+.application-card.rejected .indicator-badge {
+    background: #dc3545;
+}
+
+/* Visual Controls Section */
+.visual-controls {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.btn-clear-visual {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-clear-visual:hover {
+    background: linear-gradient(135deg, #5a6268, #495057);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
+}
+
+.btn-clear-visual:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-clear-visual:disabled {
+    background: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

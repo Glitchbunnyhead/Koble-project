@@ -20,8 +20,9 @@ public class EducationalProjectDAO {
 
     public EducationalProject create(EducationalProject educationalProject, long idProject) {
         connection.openConnection();
+        // Use explicit column names excluding educational_id to let it auto-increment
         String sql = "INSERT INTO " + ConstantsDataBase.TABLE_EDUCATIONALPROJECT + " (" +
-                ConstantsDataBase.PROJECT_COLUNA_ID + ", " +
+                "project_id, " +
                 ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_SLOTS + ", " +
                 ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_JUSTIFICATION + ", " +
                 ConstantsDataBase.PROJECT_COLUNA_EDUCATIONAL_COURSE + ") VALUES (?, ?, ?, ?)";
