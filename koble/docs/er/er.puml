@@ -98,15 +98,6 @@ entity "participant" as participant {
   project_id : BIGINT <<FK>>
 }
 
-entity "teacher_idea" as teacher_idea {
-  + idea_id    : BIGINT <<PK,FK>>
-  + teacher_id : BIGINT <<PK,FK>>
-}
-
-entity "student_idea" as student_idea {
-  + idea_id    : BIGINT <<PK,FK>>
-  + student_id : BIGINT <<PK,FK>>
-}
 
 entity "company_project" as company_project {
   + project_id : BIGINT <<PK,FK>>
@@ -148,12 +139,6 @@ project    ||--o{ fellow        : project_id
 student    ||--o{ fellow        : student_id
 
 project    ||--o{ participant   : project_id
-
-teacher_staff ||--o{ teacher_idea : teacher_id
-idea       ||--o{ teacher_idea  : idea_id
-
-student    ||--o{ student_idea  : student_id
-idea       ||--o{ student_idea  : idea_id
 
 company    ||--o{ company_project : company_id
 project    ||--o{ company_project : project_id
