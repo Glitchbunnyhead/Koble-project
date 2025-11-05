@@ -108,22 +108,6 @@ CREATE TABLE participant (
 );
     
 
-CREATE TABLE teacher_idea (
-    idea_id BIGINT,
-    teacher_id BIGINT,
-    FOREIGN KEY (teacher_id) REFERENCES teacher_staff(teacher_staff_id) ON DELETE CASCADE,
-    FOREIGN KEY (idea_id) REFERENCES idea(idea_id) ON DELETE CASCADE,
-    PRIMARY KEY (idea_id, teacher_id)
-);
-
-CREATE TABLE student_idea (
-    idea_id BIGINT,
-    student_id BIGINT,
-    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE,
-    FOREIGN KEY (idea_id) REFERENCES idea(idea_id) ON DELETE CASCADE,
-    PRIMARY KEY (idea_id, student_id)
-);
-
 CREATE TABLE company_project (
     project_id BIGINT,
     company_id BIGINT,
