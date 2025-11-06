@@ -1,7 +1,6 @@
 package com.koble.koble.model;
 
 import java.util.Date;
-import java.util.Objects;
 
 public class Student {
 

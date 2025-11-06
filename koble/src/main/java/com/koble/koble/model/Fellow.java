@@ -1,6 +1,5 @@
 package com.koble.koble.model;
 
-import java.util.Date;
 
 public class Fellow {
 

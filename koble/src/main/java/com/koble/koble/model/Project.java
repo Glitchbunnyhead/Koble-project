@@ -1,7 +1,5 @@
 package com.koble.koble.model;
 
-import java.util.Objects;
-
 public abstract class Project {
 
     private long id;
