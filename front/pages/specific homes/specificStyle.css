@@ -1,0 +1,87 @@
+.retornarHomeGeral {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    line-height: 1.1;
+    font-size: 30px;
+    margin: 20px;
+}
+
+.Title {
+    font-weight: bold;
+    color: white;
+    height: auto;
+    display: flex;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    align-items: center;
+    font-size: 50px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(52, 247, 111, 0.3);
+}
+
+.Title p {
+    margin: 0;
+    padding: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.returnBtn {
+    position: absolute;
+    right: 0;
+}
+
+.returnBtn a {
+    cursor: pointer;
+    color: var(--text-light, #ffffff);
+    font-weight: bold;
+    background: rgba(45, 45, 45, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    height: 100%;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: inline-block;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.returnBtn a:hover {
+    background: rgba(52, 247, 111, 0.2);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 247, 111, 0.4);
+}
+
+/* 2x2 Grid Layout for Project Details */
+.project-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 6px;
+    margin-top: 5px;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.project-details-grid span {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.9);
+    padding: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.project-details-grid .empty-field {
+    background-color: transparent;
+    visibility: hidden;
+}

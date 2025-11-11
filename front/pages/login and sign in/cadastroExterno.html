@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Externo - Koble</title>
     <link rel="stylesheet" href="loginStyle.css" />
+    <script src="../../shared-utils.js" defer></script>
     <script src="loginScript.js" defer></script>
 </head>
 <body class="welcomeBody">
@@ -23,16 +24,17 @@
                 <input id="checkCompany" type="checkbox" />
             </div>
 
-            <form id="LForm" class="forms">
+            <form class="forms">
                 <input type="text" id="nameInput" placeholder="Nome completo" required />
                 <input type="email" id="emailInput" placeholder="E-mail" required />
                 <input type="password" id="passwordInput" placeholder="Senha" required />
                 <input type="cellphone" id="cellphoneInput" placeholder="Telefone"/>
-                <input type="cnpj" id="cnpjInput" placeholder="cnpj" required />
+                <input type="cnpj" id="cnpjInput" placeholder="CNPJ (opcional - apenas se for empresa)" />
                 <button type="submit" class="loginBtn">Entrar</button>
                 <p class="redirectText">
                 Já tem uma conta? <a href="/front/pages/login and sign in/login.html" class="redirectLink">Faça login</a>
                 </p>
+                <button type="button" class="backBtn" onclick="window.history.back()">← Voltar</button>
             </form>
         </div>
     </div>

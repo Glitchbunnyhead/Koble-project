@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Candidaturas - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+    <link rel="stylesheet" href="manageApplicationsStyle.css">
+</head>
+<body>
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">meus projetos</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Gerenciar Candidaturas</h1>
+            <p class="page-subtitle">Aprove ou rejeite candidaturas para seus projetos</p>
+            
+        </div>
+
+        <!-- Simple Controls -->
+        <div class="controls-section">
+            <div class="stats-summary">
+                <span id="totalApplications" class="stat-item">Total: 0</span>
+                <span id="pendingApplications" class="stat-item">Pendentes: 0</span>
+                <span id="approvedApplications" class="stat-item">Aprovados: 0</span>
+                <span id="rejectedApplications" class="stat-item">Rejeitados: 0</span>
+            </div>
+            <div class="visual-controls">
+                <button id="clearVisualChanges" class="btn-clear-visual" onclick="manageApplicationsManager.clearAllVisualChanges()" title="Desfazer todas as alterações visuais">
+                    🔄 Limpar Alterações
+                </button>
+            </div>
+        </div>
+
+        <!-- Applications List -->
+        <div class="applications-container">
+            <div id="applicationsGrid" class="applications-grid">
+                <!-- Applications will be loaded here -->
+            </div>
+            
+
+        </div>
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">📋</div>
+                <h3>Nenhuma candidatura encontrada</h3>
+                <p>Não há candidaturas para seus projetos no momento.</p>
+            </div>
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Carregando candidaturas...</p>
+        </div>
+    </div>
+
+    <!-- Application Detail Modal -->
+    <div id="applicationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Candidatura</h2>
+                <span class="close" onclick="closeApplicationModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="application-details">
+                    <div class="detail-section">
+                        <h3>Informações do Candidato</h3>
+                        <p><strong>Nome:</strong> <span id="candidateName">-</span></p>
+                        <p><strong>Email:</strong> <span id="candidateEmail">-</span></p>
+                        <p><strong>Tipo:</strong> <span id="candidateType">-</span></p>
+                        <p><strong>Data da Candidatura:</strong> <span id="applicationDate">-</span></p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Projeto</h3>
+                        <p><strong>Título:</strong> <span id="projectTitle">-</span></p>
+                        <p><strong>Tipo de Candidatura:</strong> <span id="applicationType">-</span></p>
+                        <p id="fellowshipInfo" style="display: none;">
+                            <strong>Valor da Bolsa:</strong> R$ <span id="fellowshipValue">0,00</span>
+                        </p>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h3>Status Atual</h3>
+                        <p class="status-current">
+                            <span id="currentStatus" class="status-badge">PENDING</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="approveBtn" class="btn btn-approve" onclick="approveApplication()">
+                    ✅ Aprovar
+                </button>
+                <button id="rejectBtn" class="btn btn-reject" onclick="rejectApplication()">
+                    ❌ Rejeitar
+                </button>
+                <button class="btn btn-secondary" onclick="closeApplicationModal()">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="manageApplicationsScript.js"></script>
+</body>
+</html>

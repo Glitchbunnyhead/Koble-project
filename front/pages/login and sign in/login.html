@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Entrar - Koble</title>
     <link rel="stylesheet" href="loginStyle.css" />
+    <script src="../../shared-utils.js" defer></script>
     <script src="loginScript.js" defer></script>
 </head>
 <body class="welcomeBody">
@@ -18,13 +19,13 @@
     <div class="rightWelcome">
         <div class="loginCard">
             <h2>Entrar</h2>
-            <form id="LForm" class="forms">
+            <form class="forms">
                 <input type="email" id="emailInput" placeholder="E-mail" required />
                 <input type="password" id="passwordInput" placeholder="Senha" required />
                 <button type="submit" class="loginBtn">Entrar</button>
             </form>
             <p class="redirectText">
-                Não tem uma conta? <a href="/front/pages/welcome/welcome.html" class="redirectLink">Crie uma agora</a>
+                Não tem uma conta? <a href="/front/pages/welcome/index.html" class="redirectLink">Crie uma agora</a>
             </p>
         </div>
     </div>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Details</title>
+    <script src="../../headerManager.js" defer></script>
+    <script src="../../shared-utils.js" defer></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="projectStyle.css">
+    <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div id="header">
+        <div class="header-navigation">
+            <div class="redirects home-redirect">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">tutoriais</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">sobre</p>
+            </div>
+        </div>
+        <div class="configDiv">
+            <a href=""><img src="../../images/image.png" alt="configurações" class="config-icon"></a>
+        </div>
+    </div>
+    
+    <!--
+    timeline: "2024-2025",
+    //duration: "6 months",
+    //requirements: "Education background, teaching experience preferred",
+    //title: "Digital Learning Platform",
+    //coordenator: "Prof. João Santos",
+    //type: "educational",
+    //typeId: "EDU001",
+    -->
+                
+    <div class="project-container">
+        <div class="tituloTipo">
+            <h1 id="project-title">Título do Projeto</h1>
+            <span><p id="project-type">Tipo do Projeto</p></span>
+        </div>
+        
+        <p id="project-subtitle" class="project-subtitle">
+            Subtítulo do projeto
+        </p>
+        
+        <p id="project-description" class="project-description">
+            Esta é uma descrição detalhada do projeto. Aqui você pode incluir informações sobre os objetivos, metodologia, resultados esperados e qualquer outro detalhe relevante.
+        </p>
+        
+        <div class="project-details">
+            <p><strong>Duração:</strong> <span id="project-duration">6 meses</span></p>
+            <p><strong>Coordenador:</strong> <span id="project-coordinator">Nome do Coordenador</span></p>
+            <p class="membros">
+                <strong>Membros:</strong><br>
+                <span id="project-members">
+                    membro1 <br>
+                    membro2
+                </span>
+            </p>
+        </div>
+
+        <div class="project-details">
+            <p><strong>Timeline:</strong> <span id="project-timeline">2024-2025</span></p>
+            <p><strong>Requisitos:</strong> <span id="project-requirements">Requisitos do projeto</span></p>
+            <p><strong>Horas Complementares:</strong> <span id="complement-hours">40h</span></p>
+            <p><strong>Público Alvo:</strong> <span id="target-audience">Estudantes e pesquisadores</span></p>
+        </div>
+
+        <div class="project-details">
+            <p><strong>Áreas:</strong> <span id="project-areas">Área 1, Área 2</span></p>
+            <p class="membros">
+                <strong>Informações Adicionais:</strong><br>
+                <span id="additional-info-text">Informações complementares sobre o projeto</span>
+            </p>
+        </div>
+
+        <div id="info-bolsa" class="info-bolsa" style="display: none;">
+            <pre>Informações sobre a Bolsa</pre>
+            <div class="bolsa-details">
+                <p>
+                    <strong>Valor da bolsa:</strong> R$ <span id="fellowship-value">400,00</span><br>
+                    <strong>Vagas Disponíveis:</strong> <span id="available-slots">5 vagas</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="additional-info">
+            <div class="info-section">
+                <h3>Link de Inscrição</h3>
+                <p><a id="project-link" href="#" target="_blank">Link para inscrição</a></p>
+            </div>
+            
+            <div class="info-section">
+                <h3>Instituições Parceiras</h3>
+                <p id="partner-institutions">Universidade Federal, Instituto de Pesquisa</p>
+            </div>
+            
+            <div class="info-section" id="research-specific" style="display: none;">
+                <h3>Objetivo da Pesquisa</h3>
+                <p id="research-aim">Objetivo específico da pesquisa</p>
+            </div>
+            
+            <div class="info-section" id="research-justification" style="display: none;">
+                <h3>Justificativa</h3>
+                <p id="research-just">Justificativa do projeto</p>
+            </div>
+            
+            <div class="info-section" id="extension-specific" style="display: none;">
+                <h3>Processo Seletivo</h3>
+                <p id="selection-process">Processo de seleção para participação</p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button id="like-button" class="action-btn">👍 Curtir</button>
+            <button id="apply-participant-btn" class="action-btn apply-participant" style="display: none;">📋 Enviar Candidatura - Participante</button>
+            <button id="apply-fellow-btn" class="action-btn apply-fellow" style="display: none;">🎓 Enviar Candidatura - Bolsista</button>
+            <button id="back-btn" class="action-btn">← Voltar</button>
+        </div>
+        
+        <!-- Application Status Messages -->
+        <div id="application-status" class="application-status" style="display: none;">
+            <div class="status-content">
+                <h3 id="status-title">Status da Candidatura</h3>
+                <p id="status-message">Carregando...</p>
+            </div>
+        </div>
+        
+        <!-- Access Denied Message -->
+        <div id="access-denied" class="access-denied" style="display: none;">
+            <div class="access-content">
+                <h3>Acesso Negado</h3>
+                <p id="access-message">Você não tem permissão para esta ação.</p>
+                <button onclick="hideAccessDenied()" class="access-ok-btn">Entendido</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

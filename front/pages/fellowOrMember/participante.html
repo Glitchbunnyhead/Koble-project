@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Participações - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+    <link rel="stylesheet" href="participanteStyle.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">minhas participações</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Minhas Participações</h1>
+            <p class="page-subtitle">Gerencie suas participações e bolsas em projetos</p>
+        </div>
+
+        <!-- Simple Controls Section -->
+        <div class="controls-section">
+            <div class="filter-group">
+                <label for="searchParticipations">Buscar:</label>
+                <input type="text" id="searchParticipations" placeholder="Buscar participações..." class="search-input">
+            </div>
+            <div class="filter-group">
+                <label for="statusFilter">Status:</label>
+                <select id="statusFilter">
+                    <option value="">Todos os status</option>
+                    <option value="active">Ativo</option>
+                    <option value="pending">Pendente</option>
+                    <option value="completed">Concluído</option>
+                    <option value="cancelled">Cancelado</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="typeFilter">Tipo:</label>
+                <select id="typeFilter">
+                    <option value="">Todos os tipos</option>
+                    <option value="fellowship">Bolsa</option>
+                    <option value="voluntary">Voluntário</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortBy">Ordenar por:</label>
+                <select id="sortBy">
+                    <option value="recent">Mais recentes</option>
+                    <option value="oldest">Mais antigos</option>
+                    <option value="project">Nome do projeto</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Participations Grid -->
+        <div class="participations-container">
+            <div id="participationsGrid" class="participations-grid">
+                <!-- Participations will be loaded here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">📋</div>
+                <h3>Nenhuma participação encontrada</h3>
+                <p>Você ainda não participa de nenhum projeto. Explore projetos disponíveis para se candidatar!</p>
+                <button class="primary-btn" onclick="participationManager.exploreProjects()">
+                    Explorar Projetos
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Carregando suas participações...</p>
+        </div>
+    </div>
+
+    <!-- Application Modal (for when coming from a project page) -->
+    <div id="applicationModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="participationManager.closeApplicationModal()">&times;</span>
+            <div class="tituloTipo">
+                <h1>Candidatar-se ao Projeto</h1>
+                <span><p>APPLICATION</p></span>
+            </div>
+            
+            <div class="application-content">
+                <div class="project-info">
+                    <h2 id="modal-project-title">Carregando projeto...</h2>
+                    <p id="modal-project-coordinator">Coordenador: -</p>
+                </div>
+                
+                <p class="application-description">
+                    Preencha o formulário abaixo para se candidatar a este projeto
+                </p>
+                
+                <!-- Application Form -->
+                <form id="application-form" class="fellowship-form">
+                    <!-- Dynamic sections will be populated by JavaScript based on user type and missing data -->
+                    <div id="dynamic-form-content">
+                        <!-- Form sections will be inserted here -->
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Motivação</h3>
+                        
+                        <div class="form-group">
+                            <label for="motivation">Por que deseja participar deste projeto? *</label>
+                            <textarea id="motivation" name="motivation" required rows="4" 
+                                      placeholder="Descreva sua motivação e como você pode contribuir para o projeto..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="back-btn" class="btn-secondary">← Cancelar</button>
+                        <button type="submit" id="submit-btn" class="btn-primary">Enviar Candidatura</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="participante.js"></script>
+</body>
+</html>

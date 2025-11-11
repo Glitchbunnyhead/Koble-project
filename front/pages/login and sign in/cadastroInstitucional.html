@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Institucional - Koble</title>
     <link rel="stylesheet" href="loginStyle.css" />
+    <script src="../../shared-utils.js" defer></script>
     <script src="loginScript.js" defer></script>
 </head>
 <body class="welcomeBody">
@@ -23,7 +24,7 @@
                 <input id="checkTeacher" type="checkbox" />
             </div>
 
-            <form id="LForm" class="forms">
+            <form class="forms">
                 <input type="text" id="registrationInput" placeholder="Registration / SIAPE" required />
                 <input type="text" id="nameInput" placeholder="Nome completo" required />
                 <input type="email" id="emailInput" placeholder="E-mail" required />
@@ -34,7 +35,7 @@
                 <p class="redirectText">
                 Já tem uma conta? <a href="/front/pages/login and sign in/login.html" class="redirectLink">Faça login</a>
                 </p>
-
+                <button type="button" class="backBtn" onclick="window.history.back()">← Voltar</button>
             </form>
         </div>
     </div>

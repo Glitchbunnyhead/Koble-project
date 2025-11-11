@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorar Ideias - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+    <link rel="stylesheet" href="ideas.css">
+</head>
+<body>
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">meus projetos</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1>💡 Explorar Ideias</h1>
+            <p class="page-subtitle">Descubra ideias inovadoras e encontre oportunidades de colaboração</p>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="filters-section">
+                <div class="search-group">
+                    <input type="text" id="searchInput" placeholder="Buscar ideias..." class="search-input">
+                    <button id="searchBtn" class="search-btn">🔍</button>
+                </div>
+                
+                <select id="areaFilter" class="filter-select">
+                    <option value="">Todas as áreas</option>
+                    <option value="Tecnologia da Informação">Tecnologia da Informação</option>
+                    <option value="Engenharia">Engenharia</option>
+                    <option value="Ciências Exatas">Ciências Exatas</option>
+                    <option value="Ciências Humanas">Ciências Humanas</option>
+                    <option value="Ciências Biológicas">Ciências Biológicas</option>
+                    <option value="Ciências da Saúde">Ciências da Saúde</option>
+                    <option value="Ciências Sociais">Ciências Sociais</option>
+                    <option value="Artes e Design">Artes e Design</option>
+                    <option value="Educação">Educação</option>
+                    <option value="Meio Ambiente">Meio Ambiente</option>
+                    <option value="Sustentabilidade">Sustentabilidade</option>
+                    <option value="Inovação Social">Inovação Social</option>
+                </select>
+                
+                <select id="typeFilter" class="filter-select">
+                    <option value="">Todos os tipos</option>
+                    <option value="Research">Pesquisa</option>
+                    <option value="Extension">Extensão</option>
+                    <option value="Teaching">Ensino</option>
+                </select>
+                
+                <button id="clearFiltersBtn" class="clear-filters-btn">Limpar Filtros</button>
+            </div>
+            
+            <div class="actions-section">
+                <div class="view-controls">
+                    <button id="gridViewBtn" class="view-btn active">⊞ Grade</button>
+                    <button id="listViewBtn" class="view-btn">☰ Lista</button>
+                </div>
+                
+                <div class="sort-controls">
+                    <select id="sortSelect" class="sort-select">
+                        <option value="newest">Mais Recentes</option>
+                        <option value="oldest">Mais Antigas</option>
+                        <option value="title">Título (A-Z)</option>
+                        <option value="area">Área</option>
+                        <option value="type">Tipo</option>
+                    </select>
+                </div>
+                
+                <!-- Student-only create button -->
+                <button id="createIdeaBtn" class="create-btn" style="display: none;">
+                    ➕ Nova Ideia
+                </button>
+                
+                <!-- Student-only "My Ideas" button -->
+                <button id="myIdeasBtn" class="my-ideas-btn" style="display: none;">
+                    📝 Minhas Ideias
+                </button>
+            </div>
+        </div>
+
+        <!-- Ideas Content -->
+        <div class="ideas-container" id="ideasContainer">
+            <!-- Ideas will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Carregando ideias...</p>
+        </div>
+
+        <!-- Empty State - No Ideas -->
+        <div id="noIdeasState" class="empty-state" style="display: none;">
+            <div class="empty-icon">💡</div>
+            <h3>Nenhuma ideia ainda</h3>
+            <p>Seja o primeiro a compartilhar uma ideia inovadora!</p>
+            <button id="createFirstIdeaBtn" class="create-first-btn">Criar Primeira Ideia</button>
+        </div>
+
+        <!-- Empty State - No Results -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">🔍</div>
+            <h3>Nenhuma ideia encontrada</h3>
+            <p>Tente ajustar seus filtros ou palavras-chave de busca.</p>
+            <button id="clearFiltersEmptyBtn" class="clear-filters-btn">Limpar Filtros</button>
+        </div>
+    </div>
+
+    <!-- Idea Detail Modal -->
+    <div id="ideaDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalIdeaTitle">Detalhes da Ideia</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="ideaDetailContent">
+                <!-- Idea details will be populated here -->
+            </div>
+            <div class="modal-footer" id="ideaDetailActions">
+                <!-- Action buttons will be populated based on user role -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Adoption Confirmation Modal -->
+    <div id="adoptionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🎯 Adotar Ideia</h2>
+                <span class="close" onclick="document.getElementById('adoptionModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Você está prestes a adotar esta ideia e transformá-la em um projeto oficial.</p>
+                <div class="adoption-info">
+                    <h4 id="adoptionIdeaTitle">Título da Ideia</h4>
+                    <p><strong>Propositor:</strong> <span id="adoptionProposer"></span></p>
+                    <p><strong>Área:</strong> <span id="adoptionArea"></span></p>
+                    <p><strong>Tipo:</strong> <span id="adoptionType"></span></p>
+                </div>
+                <p><strong>Confirma a adoção desta ideia?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="document.getElementById('adoptionModal').style.display='none'" class="btn-secondary">
+                    Cancelar
+                </button>
+                <button id="confirmAdoptionBtn" class="btn-primary">
+                    ✅ Confirmar Adoção
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Idea Modal -->
+    <div id="editIdeaModal" class="modal">
+        <div class="modal-content large">
+            <div class="modal-header">
+                <h2>✏️ Editar Ideia</h2>
+                <span class="close" onclick="document.getElementById('editIdeaModal').style.display='none'">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="editIdeaForm" class="edit-form">
+                    <!-- Form fields will be populated here -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button onclick="document.getElementById('editIdeaModal').style.display='none'" class="btn-secondary">
+                    Cancelar
+                </button>
+                <button id="saveIdeaBtn" class="btn-primary">
+                    💾 Salvar Alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div id="notifications" class="notifications-container"></div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="ideas.js"></script>
+</body>
+</html>

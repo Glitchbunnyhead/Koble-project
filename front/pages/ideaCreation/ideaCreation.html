@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Ideia - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+    <link rel="stylesheet" href="ideaCreation.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">meus projetos</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="page-container">
+        <div class="creation-header">
+            <h1>💡 Criar Nova Ideia</h1>
+            <p class="subtitle">Compartilhe sua ideia inovadora e encontre colaboradores interessados</p>
+        </div>
+
+        <!-- Idea Creation Form -->
+        <div class="form-container">
+            <form id="ideaCreationForm" class="idea-form">
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h2>📋 Informações Básicas</h2>
+                    
+                    <div class="input-group">
+                        <label for="ideaTitle">Título da Ideia *</label>
+                        <input type="text" id="ideaTitle" name="title" required 
+                               placeholder="Digite o título da sua ideia">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ideaSubtitle">Subtítulo</label>
+                        <input type="text" id="ideaSubtitle" name="subtitle"
+                               placeholder="Breve descrição complementar">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ideaArea">Área de Conhecimento *</label>
+                        <select id="ideaArea" name="area" required>
+                            <option value="">Selecione uma área</option>
+                            <option value="Tecnologia da Informação">Tecnologia da Informação</option>
+                            <option value="Engenharia">Engenharia</option>
+                            <option value="Ciências Exatas">Ciências Exatas</option>
+                            <option value="Ciências Humanas">Ciências Humanas</option>
+                            <option value="Ciências Biológicas">Ciências Biológicas</option>
+                            <option value="Ciências da Saúde">Ciências da Saúde</option>
+                            <option value="Ciências Sociais">Ciências Sociais</option>
+                            <option value="Artes e Design">Artes e Design</option>
+                            <option value="Educação">Educação</option>
+                            <option value="Meio Ambiente">Meio Ambiente</option>
+                            <option value="Sustentabilidade">Sustentabilidade</option>
+                            <option value="Inovação Social">Inovação Social</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ideaType">Tipo de Ideia *</label>
+                        <select id="ideaType" name="type" required>
+                            <option value="">Selecione o tipo</option>
+                            <option value="Research">Pesquisa</option>
+                            <option value="Extension">Extensão</option>
+                            <option value="Teaching">Ensino</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description Section -->
+                <div class="form-section">
+                    <h2>📝 Descrição da Ideia</h2>
+                    
+                    <div class="input-group">
+                        <label for="ideaDescription">Descrição Detalhada *</label>
+                        <textarea id="ideaDescription" name="description" required
+                                  placeholder="Descreva sua ideia em detalhes, incluindo o que pretende desenvolver ou pesquisar..."
+                                  rows="5"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ideaAim">Objetivo Principal *</label>
+                        <textarea id="ideaAim" name="aim" required
+                                  placeholder="Qual é o principal objetivo que você deseja alcançar com esta ideia?"
+                                  rows="3"></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="ideaJustification">Justificativa *</label>
+                        <textarea id="ideaJustification" name="justification" required
+                                  placeholder="Por que esta ideia é importante? Qual problema ela resolve?"
+                                  rows="4"></textarea>
+                    </div>
+                </div>
+
+                <!-- Target Audience Section -->
+                <div class="form-section">
+                    <h2>🎯 Público-Alvo</h2>
+                    
+                    <div class="input-group">
+                        <label for="ideaTargetAudience">Público-Alvo *</label>
+                        <textarea id="ideaTargetAudience" name="targetAudience" required
+                                  placeholder="Quem seria beneficiado por esta ideia? Estudantes, professores, comunidade, empresas..."
+                                  rows="3"></textarea>
+                    </div>
+                </div>
+
+                <!-- Proposer Section -->
+                <div class="form-section">
+                    <h2>👤 Propositor</h2>
+                    
+                    <div class="input-group">
+                        <label for="ideaProposer">Nome do Propositor</label>
+                        <input type="text" id="ideaProposer" name="proposer" readonly
+                               placeholder="Será preenchido automaticamente">
+                        <small class="help-text">Seu nome será usado automaticamente como propositor</small>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="button" id="previewBtn" class="btn-secondary">
+                        👁️ Visualizar
+                    </button>
+                    <button type="submit" id="submitBtn" class="btn-primary">
+                        🚀 Criar Ideia
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 Prévia da Ideia</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body" id="previewContent">
+                <!-- Preview content will be generated here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="closePreviewBtn" class="btn-secondary">Fechar</button>
+                <button type="button" id="confirmCreateBtn" class="btn-primary">Confirmar e Criar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success">
+            <div class="modal-header">
+                <h2>✅ Ideia Criada com Sucesso!</h2>
+            </div>
+            <div class="modal-body">
+                <p>Sua ideia foi criada e já está disponível para que outros usuários possam visualizar e se interessar em colaborar.</p>
+                <div class="success-actions">
+                    <button type="button" id="viewIdeasBtn" class="btn-primary">Ver Minhas Ideias</button>
+                    <button type="button" id="createAnotherBtn" class="btn-secondary">Criar Outra Ideia</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Criando sua ideia...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="ideaCreation.js"></script>
+</body>
+</html>

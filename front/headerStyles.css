@@ -1,0 +1,189 @@
+/* Authentication loading indicator */
+.auth-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #666;
+    background: rgba(52, 247, 111, 0.1);
+    border-radius: 20px;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.auth-loading::before {
+    content: "⏳";
+    animation: spin 2s linear infinite;
+}
+
+/* Header User Menu Styles */
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.user-info:hover {
+    background-color: rgba(52, 247, 111, 0.1);
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ffffff !important;
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/*makes sure that the color is white even in other contexts*/
+.user-menu .user-info .user-name,
+#header .configDiv .user-menu .user-info .user-name,
+span.user-name {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+/* Force white color on all text within user-name span */
+.user-name * {
+    color: inherit !important;
+}
+
+.user-type-badge {
+    background: linear-gradient(135deg, var(--primary-color, #34f76f), var(--secondary-color, #e322f5));
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 4px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.user-type-badge.student {
+    background: linear-gradient(135deg, #17a2b8, #138496);
+}
+
+.user-type-badge.teacher {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.user-type-badge.company {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #000;
+}
+
+.user-type-badge.external {
+    background: linear-gradient(135deg, #6f42c1, #5a359a);
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: rgba(45, 45, 45, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    min-width: 180px;
+    z-index: 1000;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+    color: var(--text-light, #ffffff);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dropdown-item:hover {
+    background: rgba(52, 247, 111, 0.2);
+}
+
+.dropdown-item.logout {
+    color: #e74c3c;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: none;
+}
+
+.dropdown-item.logout:hover {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 4px 0;
+}
+
+.login-btn {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 26px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 247, 111, 0.3);
+}
+
+.login-link {
+    text-decoration: none;
+}
+
+/* Enhanced redirect elements for logged-in users */
+.redirectsElements {
+    transition: all 0.3s ease;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.redirectsElements:hover {
+    background: linear-gradient(135deg, rgba(52, 247, 111, 0.1), rgba(227, 34, 245, 0.1));
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .user-name {
+        display: none;
+    }
+    
+    .user-dropdown {
+        right: -20px;
+        min-width: 160px;
+    }
+    
+    .dropdown-item {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}

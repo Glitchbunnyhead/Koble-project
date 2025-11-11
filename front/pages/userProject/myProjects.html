@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus Projetos - Koble</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="myProjectsStyle.css">
+    <link rel="stylesheet" href="../../headerStyles.css">
+</head>
+<body>
+    <div id="header">
+        <!-- Navigation Links -->
+        <div class="header-navigation">
+            <div class="redirects">
+                <p class="redirectsElements">home</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">inicio</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">meus projetos</p>
+            </div>
+            <div class="redirects">
+                <p class="redirectsElements">ajuda</p>
+            </div>
+        </div>
+
+        <!-- User/Config Section -->
+        <div class="configDiv">
+            <!-- Header Manager will populate this -->
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="page-header">
+            <h1>Meus Projetos</h1>
+            <p class="page-subtitle">Gerencie todos os seus projetos em um só lugar</p>
+        </div>
+
+        <!-- Simple Controls Section -->
+        <div class="controls-section">
+            <div class="filter-group">
+                <label for="searchProjects">Buscar:</label>
+                <input type="text" id="searchProjects" placeholder="Buscar projetos..." class="search-input">
+            </div>
+            <div class="filter-group">
+                <label for="typeFilter">Tipo:</label>
+                <select id="typeFilter">
+                    <option value="">Todos os tipos</option>
+                    <option value="research">Pesquisa</option>
+                    <option value="extension">Extensão</option>
+                    <option value="educational">Educacional</option>
+                    <option value="company">Empresa</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="sortBy">Ordenar por:</label>
+                <select id="sortBy">
+                    <option value="recent">Mais recentes</option>
+                    <option value="oldest">Mais antigos</option>
+                    <option value="name">Nome A-Z</option>
+                </select>
+            </div>
+            <button id="createProjectBtn" class="primary-btn">
+                + Novo Projeto
+            </button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-container">
+            <div id="projectsGrid" class="projects-grid">
+                <!-- Projects will be loaded here -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <div class="empty-icon">📁</div>
+                <h3>Nenhum projeto encontrado</h3>
+                <p>Você ainda não possui projetos. Crie seu primeiro projeto para começar!</p>
+                <button class="primary-btn" onclick="myProjectsManager.createProject()">
+                    Criar Primeiro Projeto
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Carregando seus projetos...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../shared-utils.js"></script>
+    <script src="../../headerManager.js"></script>
+    <script src="myProjectsScript.js"></script>
+</body>
+</html>
